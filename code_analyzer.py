@@ -102,9 +102,14 @@ class CodeAnalyzer:
 
         # AI-generated code often has very structured, overly-explanatory comments
         ai_comment_indicators = [
-            r'This function (?:is used to|will|does)',  # Very formal explanations
+            r'This function (?:is used to|will|does)',
+            r'Utility function',  # ADDED - very common in AI code
+            r'Helper function',   # ADDED
             r'Initialize the (?:variable|parameter|function)',
             r'Define (?:a|the) (?:class|function|method)',
+            r'Finds? (?:a|an|the)',  # ADDED - "Finds an empty cell"
+            r'Checks? (?:if|whether|that)',  # ADDED - "Checks whether placing"
+            r'Solves? (?:the|a)',  # ADDED - "Solves the Sudoku"
             r'Import (?:necessary|required) (?:libraries|modules)',
             r'Set up the (?:configuration|parameters|variables)',
             r'Create (?:a|an) instance of',
@@ -123,10 +128,24 @@ class CodeAnalyzer:
 
         suspicious_count = 0
         total_comments = 0
+        inline_explanatory = 0
 
         # Count comments based on language
         if language == 'python':
             comments = re.findall(r'#.*$|""".*?"""|\'\'\'.*?\'\'\'', code_text, re.MULTILINE | re.DOTALL)
+            # Count inline explanatory comments (MAJOR AI INDICATOR)
+            inline_patterns = [
+                r'#\s*(?:Check|Verify|Validate|Test|Handle|Process|Calculate|Compute|Find|Get|Set|Update|Initialize|Create|Return|Add|Remove|Delete|Insert|Append|Store|Save|Load|Parse|Convert|Transform|Print|Display|Show|Iterate|Loop|Search|Sort|Filter|Map|Reduce)',
+                r'#\s*(?:row|col|column|index|value|result|output|input|data|temp|array|list|dict|string|number|count|sum|total|min|max|avg|mean),?\s*(?:col|row|index)?',
+                r'#\s*\d+\s*(?:means|represents|is|indicates)',
+                r'#\s*(?:Solution|Result|Answer|Output|Input)\s+(?:found|here|below)',
+                r'#\s*(?:Try|Attempt|Undo|Backtrack|Recursive)',
+                r'#\s*(?:Example|Sample|Test|Demo)\s+',
+            ]
+
+            for pattern in inline_patterns:
+                matches = re.findall(pattern, code_text, re.IGNORECASE)  # FIXED: was test_code
+                inline_explanatory += len(matches)
         elif language in ['javascript', 'java', 'c/c++', 'c#']:
             comments = re.findall(r'//.*$|/\*.*?\*/', code_text, re.MULTILINE | re.DOTALL)
         else:
@@ -140,32 +159,44 @@ class CodeAnalyzer:
                     suspicious_count += 1
                     break
 
-        # Check for overly detailed comments
-        if total_comments > 0:
-            comment_ratio = suspicious_count / total_comments
-            if comment_ratio > 0.4:  # Raised threshold - need strong evidence
+        # Check for docstrings on EVERY function (AI does this religiously)
+        docstring_perfect = False
+        if language == 'python':
+            functions = re.findall(r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(', code_text)
+            docstrings = re.findall(r'def\s+[a-zA-Z_][a-zA-Z0-9_]*\s*\([^)]*\):\s*(?:\n\s*)?"""', code_text)
+
+            if len(functions) >= 3 and len(docstrings) == len(functions):
+                docstring_perfect = True
+                result['suspicious'] = True
+                result['severity'] = 'critical'
+                result['description'] = f'PERFECT DOCUMENTATION: Every function ({len(functions)}/{len(functions)}) has a docstring. This is a HALLMARK of AI-generated code. '
+            elif len(functions) >= 2 and len(docstrings) / max(len(functions), 1) >= 0.75:
                 result['suspicious'] = True
                 result['severity'] = 'high'
-                result['description'] = f'Found {suspicious_count} AI-style comments out of {total_comments} total comments ({comment_ratio:.0%}). AI-generated code often contains overly formal, structured explanations.'
+                result['description'] = f'{len(docstrings)}/{len(functions)} functions have docstrings. Near-perfect documentation suggests AI generation. '
 
-        # Check for inline comments that explain every line (strong AI indicator)
-        inline_comments = re.findall(r'#\s*(?:Initialize|Calculate|Return|Iterate|Append|Create|Set)\s+(?:the|a|an)', code_text, re.IGNORECASE)
-        if len(inline_comments) > 3:  # Raised from 5 - this is a STRONG indicator
+        # CRITICAL: Check for inline explanatory comments (strongest AI indicator)
+        if inline_explanatory >= 3:
             result['suspicious'] = True
-            result['severity'] = 'critical'  # Upgraded to critical
-            result['description'] = f'Found {len(inline_comments)} AI-style inline explanatory comments. This is a strong indicator of AI generation.'
+            if inline_explanatory >= 5:
+                result['severity'] = 'critical'
+            else:
+                result['severity'] = 'high'
+            result['description'] += f'Found {inline_explanatory} inline explanatory comments (AI loves to explain every step). '
 
-        # Check for excessive commenting - but only if it's also AI-style
-        lines = code_text.split('\n')
-        code_lines = [l for l in lines if l.strip() and not l.strip().startswith('#')]
-        comment_line_ratio = total_comments / max(len(lines), 1)
+        # Check for AI-style descriptive comments in docstrings
+        if total_comments > 0:
+            comment_ratio = suspicious_count / total_comments
+            if comment_ratio > 0.3:  # Lowered threshold
+                result['suspicious'] = True
+                if result['severity'] == 'low':
+                    result['severity'] = 'medium'
+                result['description'] += f'Found {suspicious_count}/{total_comments} AI-style structured comments ({comment_ratio:.0%}). '
 
-        # Only flag if we have BOTH excessive comments AND they're AI-style
-        if comment_line_ratio > 0.35 and suspicious_count > 0:
-            result['suspicious'] = True
-            result['severity'] = 'high'
-            if not result['description']:
-                result['description'] = f'Excessive AI-style commenting detected ({comment_line_ratio:.0%} of lines).'
+        # If we have both perfect docstrings AND inline comments - VERY strong signal
+        if docstring_perfect and inline_explanatory >= 2:
+            result['severity'] = 'critical'
+            result['description'] = 'CRITICAL: Perfect docstrings on ALL functions + inline explanatory comments. This is DEFINITIVE AI-generated code. ' + result.get('description', '')
 
         return result
 
