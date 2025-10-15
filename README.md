@@ -1,6 +1,6 @@
-# AI Fraud Detection Agent
+# Kaya - AI Forgery Detection Agent
 
-A comprehensive AI-powered system for detecting fraud, tampering, and forgery in images and PDF documents.
+A comprehensive AI-powered system for detecting fraud, tampering, and forgery in images, PDF documents and Code Analysis (to catch AI generated code).
 
 ## 🎯 Features
 
