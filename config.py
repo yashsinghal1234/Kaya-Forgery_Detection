@@ -6,8 +6,8 @@ import os
 # Application Settings
 APP_NAME = "AI Fraud Detection Agent"
 VERSION = "1.0.0"
-DEBUG = True
-SECRET_KEY = os.urandom(24)
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24).hex())
 
 # Upload Settings
 UPLOAD_FOLDER = 'uploads'

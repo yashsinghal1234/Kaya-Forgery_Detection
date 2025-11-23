@@ -270,6 +270,7 @@ def api_status():
 
 
 if __name__ == '__main__':
+    port = int(os.getenv('PORT', 5000))
     print("=" * 60)
     print(f"  {config.APP_NAME} v{config.VERSION}")
     print("=" * 60)
@@ -278,11 +279,12 @@ if __name__ == '__main__':
     print(f"[*] Report folder: {config.REPORT_FOLDER}")
     print("[+] Application ready!")
     print("[*] Starting web server...")
+    print(f"[*] Port: {port}")
     print("=" * 60)
     print("\nOpen your browser and go to:")
-    print("   http://localhost:5000")
+    print(f"   http://localhost:{port}")
     print("\n   or")
-    print("   http://127.0.0.1:5000")
+    print(f"   http://127.0.0.1:{port}")
     print("\n" + "=" * 60)
 
-    app.run(debug=config.DEBUG, host='0.0.0.0', port=5000)
+    app.run(debug=config.DEBUG, host='0.0.0.0', port=port)
