@@ -258,6 +258,12 @@ def download_report(report_filename):
     return send_file(report_path, as_attachment=True, download_name=report_filename)
 
 
+@app.route('/health')
+def health():
+    """Health check endpoint for Render"""
+    return jsonify({'status': 'healthy'}), 200
+
+
 @app.route('/api/status')
 def api_status():
     """API health check"""
