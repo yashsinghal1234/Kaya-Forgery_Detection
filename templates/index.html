@@ -1,821 +1,1902 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaya</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaya - AI Forgery Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      :root {
+        --primary-teal: #2dd4bf;
+        --primary-green: #10b981;
+        --accent-purple: #8b5cf6;
+        --dark-bg: #0a0f1c;
+        --darker-bg: #050a14;
+        --card-bg: rgba(30, 41, 59, 0.4);
+        --card-hover: rgba(30, 41, 59, 0.6);
+        --border-color: rgba(51, 65, 85, 0.5);
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --gradient-main: linear-gradient(
+          135deg,
+          #0f766e 0%,
+          #14b8a6 25%,
+          #2dd4bf 50%,
+          #5eead4 100%
+        );
+        --gradient-purple: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+        --success-color: #10b981;
+        --danger-color: #ef4444;
+        --warning-color: #f59e0b;
+        --glass-bg: rgba(15, 23, 42, 0.6);
+        --glass-border: rgba(255, 255, 255, 0.1);
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: var(--dark-bg);
+        color: var(--text-primary);
+        min-height: 100vh;
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Animated Aurora Background */
+      .animated-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: var(--darker-bg);
+        overflow: hidden;
+      }
+
+      .aurora {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0.6;
+      }
+
+      .aurora-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: float 20s ease-in-out infinite;
+      }
+
+      .aurora-blob:nth-child(1) {
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(20, 184, 166, 0.3) 0%,
+          transparent 70%
+        );
+        top: -10%;
+        left: 10%;
+        animation-delay: 0s;
+      }
+
+      .aurora-blob:nth-child(2) {
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(
+          circle,
+          rgba(45, 212, 191, 0.25) 0%,
+          transparent 70%
+        );
+        top: 30%;
+        right: -5%;
+        animation-delay: 3s;
+      }
+
+      .aurora-blob:nth-child(3) {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(16, 185, 129, 0.2) 0%,
+          transparent 70%
+        );
+        bottom: -10%;
+        left: 40%;
+        animation-delay: 6s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        33% {
+          transform: translate(30px, -30px) scale(1.1);
+        }
+        66% {
+          transform: translate(-20px, 20px) scale(0.9);
+        }
+      }
+
+      .grid-overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(
+            rgba(45, 212, 191, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(45, 212, 191, 0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+        mask-image: radial-gradient(
+          ellipse 80% 50% at 50% 50%,
+          black 40%,
+          transparent 100%
+        );
+      }
+
+      /* Container */
+      .container {
+        position: relative;
+        z-index: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px 32px;
+      }
+
+      /* Header/Navbar */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 32px;
+        margin-bottom: 80px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 24px;
+        font-weight: 800;
+        background: var(--gradient-main);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.5px;
+      }
+
+      .logo::before {
+        content: "✦";
+        font-size: 28px;
+        background: var(--gradient-main);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: rotate 4s linear infinite;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 32px;
+        align-items: center;
+      }
+
+      .nav-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.3s;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .nav-link:hover {
+        color: var(--text-primary);
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: var(--gradient-main);
+        transition: width 0.3s;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      .btn-signup {
+        background: var(--card-bg);
+        color: var(--text-primary);
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-signup:hover {
+        background: var(--card-hover);
+        border-color: var(--primary-teal);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(45, 212, 191, 0.2);
+      }
+
+      /* Hero Section */
+      .hero-section {
+        text-align: center;
+        margin-bottom: 120px;
+        padding: 40px 0;
+      }
+
+      .launch-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        padding: 10px 24px;
+        border-radius: 100px;
+        margin-bottom: 40px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--primary-teal);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 4px 24px rgba(45, 212, 191, 0.15);
+      }
+
+      .launch-badge::before {
+        content: "→";
+        animation: slideRight 2s ease-in-out infinite;
+      }
+
+      @keyframes slideRight {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(5px);
+        }
+      }
+
+      .hero-title {
+        font-size: clamp(48px, 7vw, 84px);
+        font-weight: 900;
+        line-height: 1.05;
+        margin-bottom: 32px;
+        letter-spacing: -3px;
+      }
+
+      .gradient-text {
+        background: var(--gradient-main);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        display: inline-block;
+      }
+
+      .hero-subtitle {
+        font-size: 20px;
+        color: var(--text-secondary);
+        max-width: 680px;
+        margin: 0 auto 48px;
+        line-height: 1.7;
+        font-weight: 400;
+      }
+
+      .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--gradient-main);
+        color: white;
+        padding: 18px 48px;
+        border-radius: 16px;
+        border: none;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 16px 48px rgba(45, 212, 191, 0.35);
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .cta-button:hover::before {
+        left: 100%;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 24px 64px rgba(45, 212, 191, 0.45);
+      }
+
+      .cta-icon {
+        font-size: 24px;
+        transition: transform 0.3s;
+      }
+
+      .cta-button:hover .cta-icon {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      /* Stats Section */
+      .stats-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+        margin-bottom: 80px;
+      }
+
+      .stat-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 32px 24px;
+        text-align: center;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        transition: all 0.3s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--primary-teal);
+        box-shadow: 0 12px 40px rgba(45, 212, 191, 0.2);
+      }
+
+      .stat-value {
+        font-size: 48px;
+        font-weight: 900;
+        background: var(--gradient-main);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+      }
+
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      /* Powered By Section */
+      .powered-by {
+        margin-top: 80px;
+        text-align: center;
+      }
+
+      .powered-label {
+        color: var(--text-muted);
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      .tech-logos {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .tech-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-secondary);
+        font-size: 15px;
+        font-weight: 600;
+        opacity: 0.6;
+        transition: all 0.3s;
+        padding: 12px 20px;
+        border-radius: 12px;
+        background: var(--glass-bg);
+        border: 1px solid transparent;
+      }
+
+      .tech-logo:hover {
+        opacity: 1;
+        border-color: var(--primary-teal);
+        background: var(--card-hover);
+      }
+
+      .tech-icon {
+        width: 28px;
+        height: 28px;
+        background: var(--gradient-main);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
+
+      /* Analysis Card */
+      .analysis-card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 32px;
+        padding: 56px;
+        margin-top: 60px;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .analysis-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--primary-teal),
+          transparent
+        );
+        opacity: 0.5;
+      }
+
+      .card-header {
+        text-align: center;
+        margin-bottom: 48px;
+      }
+
+      .card-title {
+        font-size: 40px;
+        font-weight: 800;
+        margin-bottom: 16px;
+        letter-spacing: -1px;
+      }
+
+      .card-subtitle {
+        color: var(--text-secondary);
+        font-size: 17px;
+        font-weight: 400;
+      }
+
+      /* Tabs */
+      .tabs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 48px;
+        padding: 8px;
+        background: rgba(5, 10, 20, 0.6);
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+      }
+
+      .tab {
+        flex: 1;
+        padding: 16px 28px;
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-size: 15px;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .tab:hover:not(.active) {
+        color: var(--text-primary);
+        background: var(--card-bg);
+      }
+
+      .tab.active {
+        background: var(--gradient-main);
+        color: white;
+        box-shadow: 0 8px 24px rgba(45, 212, 191, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .tab-content {
+        display: none;
+        animation: fadeIn 0.4s ease-in-out;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Upload Zone */
+      .upload-zone {
+        border: 2px dashed var(--border-color);
+        border-radius: 24px;
+        padding: 100px 48px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(5, 10, 20, 0.5);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .upload-zone::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        padding: 2px;
+        background: transparent;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        transition: background 0.4s;
+      }
+
+      .upload-zone:hover {
+        border-color: var(--primary-teal);
+        background: rgba(45, 212, 191, 0.05);
+        transform: translateY(-4px);
+      }
+
+      .upload-zone:hover::before {
+        background: var(--gradient-main);
+      }
+
+      .upload-zone.dragover {
+        border-color: var(--primary-teal);
+        background: rgba(45, 212, 191, 0.1);
+        transform: scale(1.02);
+        box-shadow: 0 16px 48px rgba(45, 212, 191, 0.2);
+      }
+
+      .upload-icon {
+        font-size: 72px;
+        margin-bottom: 28px;
+        opacity: 0.6;
+        transition: all 0.3s;
+      }
+
+      .upload-zone:hover .upload-icon {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      .upload-text {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+      }
+
+      .upload-hint {
+        color: var(--text-secondary);
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      .upload-supported {
+        margin-top: 28px;
+        padding: 14px 28px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        display: inline-block;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--primary-teal);
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      /* Code Editor */
+      .language-selector {
+        margin-bottom: 24px;
+      }
+
+      .language-selector label {
+        display: block;
+        margin-bottom: 12px;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-primary);
+      }
+
+      .language-selector select {
+        width: 100%;
+        padding: 16px 20px;
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        color: var(--text-primary);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+      }
+
+      .language-selector select:hover {
+        border-color: var(--primary-teal);
+      }
+
+      .language-selector select:focus {
+        outline: none;
+        border-color: var(--primary-teal);
+        box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15);
+      }
+
+      .code-editor {
+        width: 100%;
+        min-height: 450px;
+        padding: 28px;
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        color: var(--text-primary);
+        font-family: "JetBrains Mono", "Fira Code", "Consolas", "Monaco",
+          monospace;
+        font-size: 14px;
+        line-height: 1.7;
+        resize: vertical;
+        transition: all 0.3s;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+      }
+
+      .code-editor:hover {
+        border-color: var(--primary-teal);
+      }
+
+      .code-editor:focus {
+        outline: none;
+        border-color: var(--primary-teal);
+        box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15);
+        background: rgba(5, 10, 20, 0.8);
+      }
+
+      .code-editor::placeholder {
+        color: var(--text-muted);
+      }
+
+      /* Selected File Display */
+      .selected-file {
+        display: none;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 16px;
+        padding: 20px 28px;
+        margin: 28px 0;
+        color: var(--success-color);
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .selected-file.show {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        animation: slideDown 0.3s ease-out;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Buttons */
+      .btn-primary {
+        width: 100%;
+        background: var(--gradient-main);
+        color: white;
+        padding: 20px 48px;
+        border-radius: 16px;
+        border: none;
+        font-weight: 700;
+        font-size: 17px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 12px 32px rgba(45, 212, 191, 0.35);
+        margin-top: 32px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      .btn-primary:hover:not(:disabled)::before {
+        left: 100%;
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 48px rgba(45, 212, 191, 0.45);
+      }
+
+      .btn-primary:active:not(:disabled) {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        background: var(--card-bg);
+      }
+
+      .report-checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 28px;
+        padding: 20px;
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .report-checkbox:hover {
+        background: var(--card-hover);
+        border-color: var(--primary-teal);
+      }
+
+      .report-checkbox input[type="checkbox"] {
+        width: 22px;
+        height: 22px;
+        cursor: pointer;
+        accent-color: var(--primary-teal);
+      }
+
+      .report-checkbox label {
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--text-primary);
+        font-size: 15px;
+      }
+
+      /* Loading */
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 80px 48px;
+      }
+
+      .loading.show {
+        display: block;
+      }
+
+      .spinner {
+        width: 80px;
+        height: 80px;
+        border: 5px solid var(--border-color);
+        border-top: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        margin: 0 auto 32px;
+        position: relative;
+      }
+
+      .spinner::before {
+        content: "";
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        border: 5px solid transparent;
+        border-top-color: var(--primary-teal);
+        border-right-color: var(--primary-green);
+        animation: spin 1.5s linear infinite reverse;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-text {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 16px;
+        background: var(--gradient-main);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .loading-hint {
+        color: var(--text-secondary);
+        font-size: 16px;
+      }
+
+      /* Results */
+      .results {
+        display: none;
+      }
+
+      .results.show {
+        display: block;
+      }
+
+      .result-header {
+        text-align: center;
+        padding: 60px;
+        border-radius: 28px;
+        margin-bottom: 56px;
+        border: 2px solid;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .result-header::before {
+        content: "";
+        position: absolute;
+        inset: -100%;
+        background: conic-gradient(
+          from 0deg,
+          transparent,
+          currentColor,
+          transparent 90deg
+        );
+        animation: rotate 3s linear infinite;
+        opacity: 0.1;
+      }
+
+      @keyframes rotate {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .result-header.fraud {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: var(--danger-color);
+        color: var(--danger-color);
+      }
+
+      .result-header.clean {
+        background: rgba(16, 185, 129, 0.1);
+        border-color: var(--success-color);
+        color: var(--success-color);
+      }
+
+      .result-title {
+        font-size: 40px;
+        font-weight: 900;
+        margin-bottom: 24px;
+        letter-spacing: -1px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .result-title.fraud {
+        color: var(--danger-color);
+      }
+
+      .result-title.clean {
+        color: var(--success-color);
+      }
+
+      .confidence-score {
+        font-size: 80px;
+        font-weight: 900;
+        margin: 28px 0;
+        position: relative;
+        z-index: 1;
+      }
+
+      .risk-badge {
+        display: inline-block;
+        padding: 10px 32px;
+        border-radius: 100px;
+        font-weight: 700;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .section-title {
+        font-size: 28px;
+        font-weight: 800;
+        margin: 56px 0 32px;
+        letter-spacing: -0.5px;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+        margin-bottom: 40px;
+      }
+
+      .info-item {
+        background: var(--glass-bg);
+        padding: 24px;
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        transition: all 0.3s;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+      }
+
+      .info-item:hover {
+        border-color: var(--primary-teal);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(45, 212, 191, 0.15);
+      }
+
+      .info-label {
+        color: var(--text-muted);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+      }
+
+      .info-value {
+        color: var(--text-primary);
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .techniques-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .technique-item {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        padding: 18px 24px;
+        border-radius: 16px;
+        color: var(--success-color);
+        font-weight: 700;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        transition: all 0.3s;
+      }
+
+      .technique-item:hover {
+        transform: translateX(4px);
+        background: rgba(16, 185, 129, 0.15);
+      }
+
+      .finding-item {
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        border-left: 4px solid var(--primary-teal);
+        padding: 28px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        transition: all 0.3s;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+      }
+
+      .finding-item:hover {
+        transform: translateX(4px);
+        border-left-width: 6px;
+      }
+
+      .finding-item.suspicious {
+        border-left-color: var(--danger-color);
+        background: rgba(239, 68, 68, 0.05);
+      }
+
+      .finding-title {
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        letter-spacing: -0.3px;
+      }
+
+      .finding-description {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 16px;
+        font-size: 15px;
+      }
+
+      .finding-meta {
+        display: flex;
+        gap: 20px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+
+      .severity-badge {
+        padding: 6px 16px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .severity-high {
+        background: rgba(239, 68, 68, 0.2);
+        color: var(--danger-color);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+
+      .severity-medium {
+        background: rgba(245, 158, 11, 0.2);
+        color: var(--warning-color);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+      }
+
+      .severity-low {
+        background: rgba(16, 185, 129, 0.2);
+        color: var(--success-color);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 20px;
+        margin-top: 64px;
+        flex-wrap: wrap;
+      }
+
+      .btn-download {
+        flex: 1;
+        min-width: 220px;
+        background: var(--gradient-main);
+        color: white;
+        padding: 18px 36px;
+        border-radius: 16px;
+        border: none;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 32px rgba(45, 212, 191, 0.3);
+      }
+
+      .btn-download:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(45, 212, 191, 0.4);
+      }
+
+      .btn-new {
+        flex: 1;
+        min-width: 220px;
+        background: var(--glass-bg);
+        border: 2px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 18px 36px;
+        border-radius: 16px;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+      }
+
+      .btn-new:hover {
+        border-color: var(--primary-teal);
+        background: var(--card-hover);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(45, 212, 191, 0.2);
+      }
+
+      .error-message {
+        display: none;
+        background: rgba(239, 68, 68, 0.1);
+        border: 2px solid var(--danger-color);
+        color: var(--danger-color);
+        padding: 24px 28px;
+        border-radius: 16px;
+        margin: 28px 0;
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .error-message.show {
+        display: block;
+        animation: shake 0.5s ease-in-out;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        75% {
+          transform: translateX(10px);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+          padding: 16px;
         }
 
-        .header {
-            text-align: center;
-            color: white;
-            padding: 30px 0;
-            margin-bottom: 30px;
+        .navbar {
+          flex-direction: column;
+          gap: 20px;
+          padding: 16px 20px;
         }
 
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .nav-links {
+          gap: 20px;
+          flex-wrap: wrap;
+          justify-content: center;
         }
 
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
+        .hero-section {
+          margin-bottom: 80px;
         }
 
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
+        .hero-title {
+          font-size: 36px;
+          letter-spacing: -1.5px;
         }
 
-        /* Tabs Styling */
+        .hero-subtitle {
+          font-size: 16px;
+        }
+
+        .stats-section {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+
+        .analysis-card {
+          padding: 32px 20px;
+          border-radius: 24px;
+        }
+
+        .card-title {
+          font-size: 32px;
+        }
+
         .tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #e0e0e0;
+          flex-direction: column;
+          gap: 8px;
         }
 
         .tab {
-            padding: 15px 30px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1em;
-            color: #666;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-            position: relative;
-            bottom: -2px;
-        }
-
-        .tab:hover {
-            color: #667eea;
-        }
-
-        .tab.active {
-            color: #667eea;
-            border-bottom-color: #667eea;
-            font-weight: bold;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
+          padding: 14px 20px;
         }
 
         .upload-zone {
-            border: 3px dashed #667eea;
-            border-radius: 10px;
-            padding: 60px 20px;
-            background: #f8f9ff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .upload-zone:hover {
-            border-color: #764ba2;
-            background: #f0f2ff;
-        }
-
-        .upload-zone.dragover {
-            border-color: #764ba2;
-            background: #e8ebff;
-            transform: scale(1.02);
+          padding: 60px 24px;
         }
 
         .upload-icon {
-            font-size: 4em;
-            margin-bottom: 15px;
+          font-size: 56px;
         }
 
         .upload-text {
-            font-size: 1.2em;
-            color: #333;
-            margin-bottom: 10px;
+          font-size: 18px;
         }
 
-        .upload-hint {
-            color: #666;
-            font-size: 0.9em;
+        .tech-logos {
+          gap: 20px;
         }
 
-        /* Code Editor Styling */
-        .code-editor-container {
-            margin-bottom: 20px;
+        .action-buttons {
+          flex-direction: column;
         }
 
-        .code-editor {
-            width: 100%;
-            min-height: 400px;
-            padding: 20px;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            background: #f8f9fa;
-            resize: vertical;
-            line-height: 1.6;
-        }
-
-        .code-editor:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
-        }
-
-        .language-selector {
-            margin-bottom: 15px;
-        }
-
-        .language-selector label {
-            font-weight: bold;
-            color: #333;
-            margin-right: 10px;
-        }
-
-        .language-selector select {
-            padding: 10px 20px;
-            font-size: 1em;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
-            background: white;
-            cursor: pointer;
-        }
-
-        #fileInput, #codeFileInput {
-            display: none;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(0,0,0,0.3);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .selected-file {
-            background: #e8f5e9;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            display: none;
-        }
-
-        .selected-file.show {
-            display: block;
-        }
-
-        .selected-file strong {
-            color: #2e7d32;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .loading.show {
-            display: block;
-        }
-
-        .spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #667eea;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .results {
-            display: none;
-        }
-
-        .results.show {
-            display: block;
-        }
-
-        .result-header {
-            text-align: center;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-        }
-
-        .result-header.fraud {
-            background: #ffebee;
-            border: 2px solid #f44336;
-        }
-
-        .result-header.clean {
-            background: #e8f5e9;
-            border: 2px solid #4caf50;
-        }
-
-        .result-title {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .result-title.fraud {
-            color: #c62828;
-        }
-
-        .result-title.clean {
-            color: #2e7d32;
+        .btn-download,
+        .btn-new {
+          width: 100%;
+          min-width: 100%;
         }
 
         .confidence-score {
-            font-size: 3em;
-            font-weight: bold;
-            margin: 15px 0;
+          font-size: 60px;
         }
 
-        .findings-section {
-            margin-top: 30px;
+        .result-header {
+          padding: 40px 24px;
         }
 
         .finding-item {
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border-left: 5px solid #667eea;
+          padding: 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero-title {
+          font-size: 28px;
         }
 
-        .finding-item.suspicious {
-            border-left-color: #f44336;
-            background: #ffebee;
+        .cta-button {
+          padding: 16px 32px;
+          font-size: 15px;
         }
 
-        .finding-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
+        .card-title {
+          font-size: 28px;
         }
 
-        .finding-description {
-            color: #666;
-            line-height: 1.6;
+        .analysis-card {
+          padding: 24px 16px;
         }
-
-        .techniques-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .technique-item {
-            background: #e8f5e9;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #4caf50;
-        }
-
-        .metadata-section {
-            background: #fff3e0;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .download-btn {
-            background: #4caf50;
-            margin-top: 20px;
-        }
-
-        .download-btn:hover {
-            background: #45a049;
-        }
-
-        .new-analysis-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin-top: 10px;
-        }
-
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .card {
-                padding: 20px;
-            }
-
-            .upload-zone {
-                padding: 40px 15px;
-            }
-
-            .tabs {
-                flex-direction: column;
-            }
-
-            .tab {
-                border-bottom: none;
-                border-left: 3px solid transparent;
-            }
-
-            .tab.active {
-                border-left-color: #667eea;
-                border-bottom: none;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div class="animated-bg">
+      <div class="aurora">
+        <div class="aurora-blob"></div>
+        <div class="aurora-blob"></div>
+        <div class="aurora-blob"></div>
+      </div>
+      <div class="grid-overlay"></div>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <h1>KAYA</h1>
-            <p>Advanced Document, Image & Code Analysis System</p>
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="logo">kaya</div>
+        <div class="nav-links">
+          <a href="#features" class="nav-link">Features</a>
+          <a href="#docs" class="nav-link">Documentation</a>
+          <a href="#pricing" class="nav-link">Pricing</a>
+          <button class="btn-signup">Get Started</button>
+        </div>
+      </nav>
+
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="launch-badge">AI-Powered Forgery Detection</div>
+
+        <h1 class="hero-title">
+          Detect Fraud, Forgery &<br />
+          <span class="gradient-text">AI-Generated Content</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Kaya uses cutting-edge AI and machine learning to analyze images,
+          PDFs, and code for tampering, manipulation, and artificial generation.
+          Get instant, detailed reports with confidence scores.
+        </p>
+
+        <a href="#analyze" class="cta-button">
+          <span class="cta-icon">🚀</span>
+          <span>Start Analysis</span>
+        </a>
+      </section>
+
+      <!-- Stats Section -->
+      <div class="stats-section">
+        <div class="stat-card">
+          <div class="stat-value">98.2%</div>
+          <div class="stat-label">Detection Accuracy</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">&lt;5s</div>
+          <div class="stat-label">Average Analysis Time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">12+</div>
+          <div class="stat-label">Detection Techniques</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">100%</div>
+          <div class="stat-label">Privacy Protected</div>
+        </div>
+      </div>
+
+      <!-- Powered By -->
+      <div class="powered-by">
+        <div class="powered-label">POWERED BY ADVANCED AI</div>
+        <div class="tech-logos">
+          <div class="tech-logo">
+            <div class="tech-icon">🔬</div>
+            <span>PyTorch</span>
+          </div>
+          <div class="tech-logo">
+            <div class="tech-icon">🧠</div>
+            <span>TensorFlow</span>
+          </div>
+          <div class="tech-logo">
+            <div class="tech-icon">👁️</div>
+            <span>OpenCV</span>
+          </div>
+          <div class="tech-logo">
+            <div class="tech-icon">⚡</div>
+            <span>scikit-learn</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis Card -->
+      <div class="analysis-card" id="analyze">
+        <div class="card-header" id="uploadSection">
+          <h2 class="card-title">AI Forgery Detection</h2>
+          <p class="card-subtitle">
+            Upload your file and let AI analyze it for tampering and forgery
+          </p>
         </div>
 
-        <div class="card upload-section" id="uploadSection">
-            <h2 style="margin-bottom: 20px; color: #333;">Select Analysis Type</h2>
+        <!-- Tabs -->
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('files')">
+            📄 Images & PDFs
+          </button>
+          <button class="tab" onclick="switchTab('codefile')">
+            💾 Code File
+          </button>
+          <button class="tab" onclick="switchTab('codetext')">
+            📝 Paste Code
+          </button>
+        </div>
 
-            <!-- Tabs -->
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab('files')">
-                    Images & PDFs
-                </button>
-                <button class="tab" onclick="switchTab('codefile')">
-                    Code File
-                </button>
-                <button class="tab" onclick="switchTab('codetext')">
-                    Paste Code
-                </button>
+        <!-- Tab Content: Files -->
+        <div class="tab-content active" id="files-content">
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">Drag & drop your file here</div>
+            <div class="upload-hint">or click to browse from your device</div>
+            <div class="upload-supported">
+              Supported: JPG, PNG, BMP, TIFF, GIF, PDF
             </div>
+          </div>
+          <input
+            type="file"
+            id="fileInput"
+            accept=".jpg,.jpeg,.png,.bmp,.tiff,.gif,.pdf"
+          />
+          <div class="selected-file" id="selectedFile">
+            <span>✅</span>
+            <span><strong>Selected:</strong> <span id="fileName"></span></span>
+          </div>
+        </div>
 
-            <!-- Tab Content: Files (Images/PDFs) -->
-            <div class="tab-content active" id="files-content">
-                <div class="upload-zone" id="uploadZone">
-                    <div class="upload-icon">📄</div>
-                    <div class="upload-text">Drag & Drop your file here</div>
-                    <div class="upload-hint">or click to browse</div>
-                    <div class="upload-hint" style="margin-top: 15px; font-weight: bold;">
-                        Supported: Images (JPG, PNG, BMP, TIFF, GIF) & PDF Documents
-                    </div>
-                </div>
-                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.bmp,.tiff,.gif,.pdf">
-                <div class="selected-file" id="selectedFile">
-                    <strong>Selected File:</strong> <span id="fileName"></span>
-                </div>
+        <!-- Tab Content: Code File -->
+        <div class="tab-content" id="codefile-content">
+          <div class="upload-zone" id="codeUploadZone">
+            <div class="upload-icon">💻</div>
+            <div class="upload-text">Drag & drop your code file</div>
+            <div class="upload-hint">Detect AI-generated code patterns</div>
+            <div class="upload-supported">
+              Supported: Python, JavaScript, Java, C++, and more
             </div>
+          </div>
+          <input
+            type="file"
+            id="codeFileInput"
+            accept=".py,.js,.java,.cpp,.c,.cs,.rb,.go,.php,.ts,.jsx,.tsx,.html,.css,.sql,.sh,.txt"
+          />
+          <div class="selected-file" id="selectedCodeFile">
+            <span>✅</span>
+            <span
+              ><strong>Selected:</strong> <span id="codeFileName"></span
+            ></span>
+          </div>
+        </div>
 
-            <!-- Tab Content: Code File -->
-            <div class="tab-content" id="codefile-content">
-                <div class="upload-zone" id="codeUploadZone">
-                    <div class="upload-icon">💾</div>
-                    <div class="upload-text">Drag & Drop your code file here</div>
-                    <div class="upload-hint">or click to browse</div>
-                    <div class="upload-hint" style="margin-top: 15px; font-weight: bold;">
-                        Supported: Python, JavaScript, Java, C/C++, C#, and more
-                    </div>
-                </div>
-                <input type="file" id="codeFileInput" accept=".py,.js,.java,.cpp,.c,.cs,.rb,.go,.php,.ts,.jsx,.tsx,.html,.css,.sql,.sh,.txt">
-                <div class="selected-file" id="selectedCodeFile">
-                    <strong>Selected File:</strong> <span id="codeFileName"></span>
-                </div>
-            </div>
-
-            <!-- Tab Content: Code Text -->
-            <div class="tab-content" id="codetext-content">
-                <div class="language-selector">
-                    <label for="languageSelect">Programming Language:</label>
-                    <select id="languageSelect">
-                        <option value="auto">Auto-detect</option>
-                        <option value="python">Python</option>
-                        <option value="javascript">JavaScript</option>
-                        <option value="java">Java</option>
-                        <option value="c/c++">C/C++</option>
-                        <option value="c#">C#</option>
-                        <option value="ruby">Ruby</option>
-                        <option value="go">Go</option>
-                        <option value="php">PHP</option>
-                        <option value="typescript">TypeScript</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="code-editor-container">
-                    <textarea id="codeEditor" class="code-editor" placeholder="Paste your code here for AI-generation detection...
+        <!-- Tab Content: Code Text -->
+        <div class="tab-content" id="codetext-content">
+          <div class="language-selector">
+            <label for="languageSelect">Programming Language</label>
+            <select id="languageSelect">
+              <option value="auto">Auto-detect</option>
+              <option value="python">Python</option>
+              <option value="javascript">JavaScript</option>
+              <option value="java">Java</option>
+              <option value="c/c++">C/C++</option>
+              <option value="c#">C#</option>
+              <option value="ruby">Ruby</option>
+              <option value="go">Go</option>
+              <option value="php">PHP</option>
+              <option value="typescript">TypeScript</option>
+            </select>
+          </div>
+          <textarea
+            id="codeEditor"
+            class="code-editor"
+            placeholder="Paste your code here for AI-generation detection...
 
 Example:
-def calculate_fibonacci(n):
+def fibonacci(n):
     if n <= 0:
         return []
     elif n == 1:
         return [0]
-    elif n == 2:
-        return [0, 1]
-
-    fib_sequence = [0, 1]
+    fib = [0, 1]
     for i in range(2, n):
-        fib_sequence.append(fib_sequence[i-1] + fib_sequence[i-2])
-
-    return fib_sequence"></textarea>
-                </div>
-            </div>
-
-            <button class="btn" id="analyzeBtn" disabled>
-                Start Analysis
-            </button>
-
-            <!-- PDF Report Generation Checkbox -->
-            <div style="text-align: center; margin-top: 20px;">
-                <label style="font-size: 1em; cursor: pointer;">
-                    <input type="checkbox" id="generateReportCheckbox" style="margin-right: 10px; cursor: pointer; width: 18px; height: 18px; vertical-align: middle;">
-                    <span style="vertical-align: middle;">Generate PDF Report (optional)</span>
-                </label>
-            </div>
-
-            <div class="error-message" id="errorMessage"></div>
+        fib.append(fib[-1] + fib[-2])
+    return fib"
+          ></textarea>
         </div>
 
-        <div class="card loading" id="loadingSection">
-            <div class="spinner"></div>
-            <h2>Analyzing...</h2>
-            <p style="margin-top: 10px; color: #666;">
-                Running comprehensive fraud detection algorithms. This may take a moment.
-            </p>
+        <button class="btn-primary" id="analyzeBtn" disabled>
+          Start AI Analysis
+        </button>
+
+        <div class="report-checkbox">
+          <input type="checkbox" id="generateReportCheckbox" />
+          <label for="generateReportCheckbox"
+            >Generate detailed PDF report (optional)</label
+          >
         </div>
 
-        <div class="card results" id="resultsSection">
-            <div class="result-header" id="resultHeader">
-                <div class="result-title" id="resultTitle"></div>
-                <div class="confidence-score" id="confidenceScore"></div>
-                <div id="riskLevel"></div>
-            </div>
+        <div class="error-message" id="errorMessage"></div>
+      </div>
 
-            <h3 style="margin-bottom: 15px;">Analysis Information</h3>
-            <div id="fileInfo"></div>
+      <!-- Loading State -->
+      <div class="analysis-card loading" id="loadingSection">
+        <div class="spinner"></div>
+        <div class="loading-text">Analyzing with AI...</div>
+        <p class="loading-hint">
+          Running advanced detection algorithms. This may take a moment.
+        </p>
+      </div>
 
-            <h3 style="margin-top: 30px; margin-bottom: 15px;">Detection Techniques Applied</h3>
-            <div class="techniques-list" id="techniquesList"></div>
-
-            <div class="findings-section">
-                <h3 style="margin-bottom: 15px;">Detailed Findings</h3>
-                <div id="findingsList"></div>
-            </div>
-
-            <div id="metadataSection"></div>
-
-            <div style="text-align: center; margin-top: 40px;">
-                <button class="btn download-btn" id="downloadBtn">
-                    Download Full Report (PDF)
-                </button>
-                <br>
-                <button class="btn new-analysis-btn" onclick="location.reload()">
-                    Analyze Another File
-                </button>
-            </div>
+      <!-- Results -->
+      <div class="analysis-card results" id="resultsSection">
+        <div class="result-header" id="resultHeader">
+          <div class="result-title" id="resultTitle"></div>
+          <div class="confidence-score" id="confidenceScore"></div>
+          <div id="riskLevel"></div>
         </div>
+
+        <h3 class="section-title">📊 File Information</h3>
+        <div class="info-grid" id="fileInfo"></div>
+
+        <h3 class="section-title">🔍 Detection Techniques Applied</h3>
+        <div class="techniques-grid" id="techniquesList"></div>
+
+        <h3 class="section-title">🔎 Detailed Findings</h3>
+        <div id="findingsList"></div>
+
+        <div id="metadataSection"></div>
+
+        <div class="action-buttons">
+          <button class="btn-download" id="downloadBtn">
+            📥 Download PDF Report
+          </button>
+          <button class="btn-new" onclick="location.reload()">
+            🔄 New Analysis
+          </button>
+        </div>
+      </div>
     </div>
 
     <script>
-        let currentTab = 'files';
-        let currentFile = null;
-        let currentCodeFile = null;
+      let currentTab = "files";
+      let currentFile = null;
+      let currentCodeFile = null;
 
-        // Tab switching
-        function switchTab(tabName) {
-            currentTab = tabName;
+      function switchTab(tabName) {
+        currentTab = tabName;
+        document
+          .querySelectorAll(".tab")
+          .forEach((tab) => tab.classList.remove("active"));
+        event.target.classList.add("active");
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((content) => content.classList.remove("active"));
+        document.getElementById(tabName + "-content").classList.add("active");
+        updateAnalyzeButton();
+      }
 
-            // Update tab buttons
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
+      function updateAnalyzeButton() {
+        const analyzeBtn = document.getElementById("analyzeBtn");
+        if (currentTab === "files") {
+          analyzeBtn.disabled = !currentFile;
+        } else if (currentTab === "codefile") {
+          analyzeBtn.disabled = !currentCodeFile;
+        } else if (currentTab === "codetext") {
+          const codeText = document.getElementById("codeEditor").value.trim();
+          analyzeBtn.disabled = codeText.length === 0;
+        }
+      }
 
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(tabName + '-content').classList.add('active');
+      // Files tab
+      const uploadZone = document.getElementById("uploadZone");
+      const fileInput = document.getElementById("fileInput");
+      const selectedFile = document.getElementById("selectedFile");
+      const fileName = document.getElementById("fileName");
 
-            // Update analyze button state
-            updateAnalyzeButton();
+      uploadZone.addEventListener("click", () => fileInput.click());
+      uploadZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadZone.classList.add("dragover");
+      });
+      uploadZone.addEventListener("dragleave", () =>
+        uploadZone.classList.remove("dragover")
+      );
+      uploadZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove("dragover");
+        if (e.dataTransfer.files.length > 0) {
+          fileInput.files = e.dataTransfer.files;
+          handleFileSelect();
+        }
+      });
+      fileInput.addEventListener("change", handleFileSelect);
+
+      function handleFileSelect() {
+        if (fileInput.files.length > 0) {
+          currentFile = fileInput.files[0];
+          fileName.textContent = currentFile.name;
+          selectedFile.classList.add("show");
+          updateAnalyzeButton();
+        }
+      }
+
+      // Code file tab
+      const codeUploadZone = document.getElementById("codeUploadZone");
+      const codeFileInput = document.getElementById("codeFileInput");
+      const selectedCodeFile = document.getElementById("selectedCodeFile");
+      const codeFileName = document.getElementById("codeFileName");
+
+      codeUploadZone.addEventListener("click", () => codeFileInput.click());
+      codeUploadZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        codeUploadZone.classList.add("dragover");
+      });
+      codeUploadZone.addEventListener("dragleave", () =>
+        codeUploadZone.classList.remove("dragover")
+      );
+      codeUploadZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        codeUploadZone.classList.remove("dragover");
+        if (e.dataTransfer.files.length > 0) {
+          codeFileInput.files = e.dataTransfer.files;
+          handleCodeFileSelect();
+        }
+      });
+      codeFileInput.addEventListener("change", handleCodeFileSelect);
+
+      function handleCodeFileSelect() {
+        if (codeFileInput.files.length > 0) {
+          currentCodeFile = codeFileInput.files[0];
+          codeFileName.textContent = currentCodeFile.name;
+          selectedCodeFile.classList.add("show");
+          updateAnalyzeButton();
+        }
+      }
+
+      // Code text
+      const codeEditor = document.getElementById("codeEditor");
+      codeEditor.addEventListener("input", updateAnalyzeButton);
+
+      // Analyze
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      analyzeBtn.addEventListener("click", analyzeDocument);
+
+      async function analyzeDocument() {
+        const uploadSection = document.getElementById("uploadSection");
+        const loadingSection = document.getElementById("loadingSection");
+        const errorMessage = document.getElementById("errorMessage");
+
+        document.querySelector(
+          ".analysis-card:not(.loading):not(.results)"
+        ).style.display = "none";
+        loadingSection.classList.add("show");
+        errorMessage.classList.remove("show");
+
+        try {
+          const formData = new FormData();
+          const generateReport = document.getElementById(
+            "generateReportCheckbox"
+          ).checked;
+          formData.append("generate_report", generateReport);
+
+          if (currentTab === "files" && currentFile) {
+            formData.append("file", currentFile);
+          } else if (currentTab === "codefile" && currentCodeFile) {
+            formData.append("file", currentCodeFile);
+          } else if (currentTab === "codetext") {
+            const codeText = codeEditor.value;
+            const language = document.getElementById("languageSelect").value;
+            formData.append("code_text", codeText);
+            formData.append("language", language);
+          }
+
+          const response = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || "Analysis failed");
+          }
+
+          const resultsResponse = await fetch(`/results/${data.analysis_id}`);
+          const results = await resultsResponse.json();
+
+          displayResults(results);
+        } catch (error) {
+          console.error("Error:", error);
+          loadingSection.classList.remove("show");
+          document.querySelector(
+            ".analysis-card:not(.loading):not(.results)"
+          ).style.display = "block";
+          errorMessage.textContent = "❌ " + error.message;
+          errorMessage.classList.add("show");
+        }
+      }
+
+      function displayResults(results) {
+        const loadingSection = document.getElementById("loadingSection");
+        const resultsSection = document.getElementById("resultsSection");
+        const resultHeader = document.getElementById("resultHeader");
+        const resultTitle = document.getElementById("resultTitle");
+        const confidenceScore = document.getElementById("confidenceScore");
+        const riskLevel = document.getElementById("riskLevel");
+
+        loadingSection.classList.remove("show");
+        resultsSection.classList.add("show");
+
+        const isFraud =
+          results.tampering_detected || results.confidence_score > 0.5;
+        const confidence = (results.confidence_score * 100).toFixed(1);
+
+        if (isFraud) {
+          resultHeader.classList.add("fraud");
+          resultHeader.classList.remove("clean");
+          resultTitle.classList.add("fraud");
+          resultTitle.classList.remove("clean");
+          resultTitle.textContent = "⚠️ Forgery Detected";
+        } else {
+          resultHeader.classList.add("clean");
+          resultHeader.classList.remove("fraud");
+          resultTitle.classList.add("clean");
+          resultTitle.classList.remove("fraud");
+          resultTitle.textContent = "✅ Authentic";
         }
 
-        // Update analyze button based on current tab and selection
-        function updateAnalyzeButton() {
-            const analyzeBtn = document.getElementById('analyzeBtn');
+        confidenceScore.textContent = `${confidence}%`;
+        confidenceScore.style.color = isFraud
+          ? "var(--danger-color)"
+          : "var(--success-color)";
 
-            if (currentTab === 'files') {
-                analyzeBtn.disabled = !currentFile;
-            } else if (currentTab === 'codefile') {
-                analyzeBtn.disabled = !currentCodeFile;
-            } else if (currentTab === 'codetext') {
-                const codeText = document.getElementById('codeEditor').value.trim();
-                analyzeBtn.disabled = codeText.length === 0;
-            }
+        let risk = "Low";
+        let riskColor = "var(--success-color)";
+        if (confidence > 75) {
+          risk = "High";
+          riskColor = "var(--danger-color)";
+        } else if (confidence > 50) {
+          risk = "Medium";
+          riskColor = "var(--warning-color)";
         }
+        riskLevel.innerHTML = `<span class="risk-badge" style="background: ${riskColor}20; color: ${riskColor};">Risk: ${risk}</span>`;
 
-        // Files tab handlers
-        const uploadZone = document.getElementById('uploadZone');
-        const fileInput = document.getElementById('fileInput');
-        const selectedFile = document.getElementById('selectedFile');
-        const fileName = document.getElementById('fileName');
-
-        uploadZone.addEventListener('click', () => fileInput.click());
-
-        uploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadZone.classList.add('dragover');
-        });
-
-        uploadZone.addEventListener('dragleave', () => {
-            uploadZone.classList.remove('dragover');
-        });
-
-        uploadZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length > 0) {
-                fileInput.files = e.dataTransfer.files;
-                handleFileSelect();
-            }
-        });
-
-        fileInput.addEventListener('change', handleFileSelect);
-
-        function handleFileSelect() {
-            if (fileInput.files.length > 0) {
-                currentFile = fileInput.files[0];
-                fileName.textContent = currentFile.name;
-                selectedFile.classList.add('show');
-                updateAnalyzeButton();
-            }
-        }
-
-        // Code file tab handlers
-        const codeUploadZone = document.getElementById('codeUploadZone');
-        const codeFileInput = document.getElementById('codeFileInput');
-        const selectedCodeFile = document.getElementById('selectedCodeFile');
-        const codeFileName = document.getElementById('codeFileName');
-
-        codeUploadZone.addEventListener('click', () => codeFileInput.click());
-
-        codeUploadZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            codeUploadZone.classList.add('dragover');
-        });
-
-        codeUploadZone.addEventListener('dragleave', () => {
-            codeUploadZone.classList.remove('dragover');
-        });
-
-        codeUploadZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            codeUploadZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length > 0) {
-                codeFileInput.files = e.dataTransfer.files;
-                handleCodeFileSelect();
-            }
-        });
-
-        codeFileInput.addEventListener('change', handleCodeFileSelect);
-
-        function handleCodeFileSelect() {
-            if (codeFileInput.files.length > 0) {
-                currentCodeFile = codeFileInput.files[0];
-                codeFileName.textContent = currentCodeFile.name;
-                selectedCodeFile.classList.add('show');
-                updateAnalyzeButton();
-            }
-        }
-
-        // Code text editor handler
-        const codeEditor = document.getElementById('codeEditor');
-        codeEditor.addEventListener('input', updateAnalyzeButton);
-
-        // Analyze button handler
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        analyzeBtn.addEventListener('click', analyzeDocument);
-
-        async function analyzeDocument() {
-            const uploadSection = document.getElementById('uploadSection');
-            const loadingSection = document.getElementById('loadingSection');
-            const errorMessage = document.getElementById('errorMessage');
-
-            uploadSection.style.display = 'none';
-            loadingSection.classList.add('show');
-            errorMessage.classList.remove('show');
-
-            try {
-                const formData = new FormData();
-
-                // Get report generation preference
-                const generateReport = document.getElementById('generateReportCheckbox').checked;
-                formData.append('generate_report', generateReport);
-
-                if (currentTab === 'files' && currentFile) {
-                    formData.append('file', currentFile);
-                } else if (currentTab === 'codefile' && currentCodeFile) {
-                    formData.append('file', currentCodeFile);
-                } else if (currentTab === 'codetext') {
-                    const codeText = codeEditor.value;
-                    const language = document.getElementById('languageSelect').value;
-                    formData.append('code_text', codeText);
-                    formData.append('language', language);
-                }
-
-                const response = await fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Analysis failed');
-                }
-
-                // Get results
-                const resultsResponse = await fetch(`/results/${data.analysis_id}`);
-                const results = await resultsResponse.json();
-
-                displayResults(results);
-
-            } catch (error) {
-                console.error('Error:', error);
-                loadingSection.classList.remove('show');
-                uploadSection.style.display = 'block';
-                errorMessage.textContent = error.message;
-                errorMessage.classList.add('show');
-            }
-        }
-
-        function displayResults(results) {
-            const loadingSection = document.getElementById('loadingSection');
-            const resultsSection = document.getElementById('resultsSection');
-            const resultHeader = document.getElementById('resultHeader');
-            const resultTitle = document.getElementById('resultTitle');
-            const confidenceScore = document.getElementById('confidenceScore');
-            const riskLevel = document.getElementById('riskLevel');
-
-            loadingSection.classList.remove('show');
-            resultsSection.classList.add('show');
-
-            // Determine if fraud/AI-generated detected
-            const isFraud = results.tampering_detected || (results.confidence_score > 0.5);
-            const confidence = (results.confidence_score * 100).toFixed(1);
-
-            // Update header
-            if (isFraud) {
-                resultHeader.classList.add('fraud');
-                resultHeader.classList.remove('clean');
-                resultTitle.classList.add('fraud');
-                resultTitle.classList.remove('clean');
-                resultTitle.textContent = '⚠️ Fraud/AI-Generated Detected';
-            } else {
-                resultHeader.classList.add('clean');
-                resultHeader.classList.remove('fraud');
-                resultTitle.classList.add('clean');
-                resultTitle.classList.remove('fraud');
-                resultTitle.textContent = '✅ No Fraud Detected';
-            }
-
-            confidenceScore.textContent = `${confidence}%`;
-
-            // Risk level
-            let risk = 'Low';
-            let riskColor = '#4caf50';
-            if (confidence > 75) {
-                risk = 'High';
-                riskColor = '#f44336';
-            } else if (confidence > 50) {
-                risk = 'Medium';
-                riskColor = '#ff9800';
-            }
-            riskLevel.innerHTML = `<span style="color: ${riskColor}; font-weight: bold;">Risk Level: ${risk}</span>`;
-
-            // File info
-            const fileInfo = results.file_info;
-            document.getElementById('fileInfo').innerHTML = `
-                <div style="background: #f5f5f5; padding: 15px; border-radius: 8px;">
-                    <p><strong>File:</strong> ${fileInfo.filename}</p>
-                    <p><strong>Type:</strong> ${fileInfo.analysis_type}</p>
-                    <p><strong>Size:</strong> ${fileInfo.size}</p>
-                    <p><strong>Upload Time:</strong> ${new Date(fileInfo.upload_time).toLocaleString()}</p>
-                    ${fileInfo.language ? `<p><strong>Language:</strong> ${fileInfo.language}</p>` : ''}
+        const fileInfo = results.file_info;
+        document.getElementById("fileInfo").innerHTML = `
+                <div class="info-item">
+                    <div class="info-label">Filename</div>
+                    <div class="info-value">${fileInfo.filename}</div>
                 </div>
+                <div class="info-item">
+                    <div class="info-label">Type</div>
+                    <div class="info-value">${fileInfo.analysis_type}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Size</div>
+                    <div class="info-value">${fileInfo.size}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Analyzed</div>
+                    <div class="info-value">${new Date(
+                      fileInfo.upload_time
+                    ).toLocaleString()}</div>
+                </div>
+                ${
+                  fileInfo.language
+                    ? `
+                <div class="info-item">
+                    <div class="info-label">Language</div>
+                    <div class="info-value">${fileInfo.language}</div>
+                </div>`
+                    : ""
+                }
             `;
 
-            // Techniques
-            const techniquesList = document.getElementById('techniquesList');
-            techniquesList.innerHTML = results.techniques_used.map(tech =>
-                `<div class="technique-item">✓ ${tech}</div>`
-            ).join('');
+        document.getElementById("techniquesList").innerHTML =
+          results.techniques_used
+            .map(
+              (tech) =>
+                `<div class="technique-item"><span>✓</span><span>${tech}</span></div>`
+            )
+            .join("");
 
-            // Findings
-            const findingsList = document.getElementById('findingsList');
-            if (results.findings && results.findings.length > 0) {
-                findingsList.innerHTML = results.findings.map(finding => {
-                    // Check if finding is suspicious using any of the possible flags
-                    const isSuspicious = finding.suspicious || finding.detected || finding.anomalous || finding.inconsistent;
-                    const severityIcon = {
-                        'high': '🔴',
-                        'medium': '🟡',
-                        'low': '🟢',
-                        'info': 'ℹ️'
-                    }[finding.severity?.toLowerCase()] || '⚪';
+        const findingsList = document.getElementById("findingsList");
+        if (results.findings && results.findings.length > 0) {
+          findingsList.innerHTML = results.findings
+            .map((finding) => {
+              const isSuspicious =
+                finding.suspicious ||
+                finding.detected ||
+                finding.anomalous ||
+                finding.inconsistent;
+              const severityIcon =
+                {
+                  high: "🔴",
+                  medium: "🟡",
+                  low: "🟢",
+                  info: "ℹ️",
+                }[finding.severity?.toLowerCase()] || "⚪";
 
-                    return `
-                    <div class="finding-item ${isSuspicious ? 'suspicious' : ''}">
+              return `
+                    <div class="finding-item ${
+                      isSuspicious ? "suspicious" : ""
+                    }">
                         <div class="finding-title">
-                            ${severityIcon} ${finding.type || finding.technique || 'Finding'}
+                            ${severityIcon} ${
+                finding.type || finding.technique || "Finding"
+              }
                         </div>
-                        <div class="finding-description">${finding.description || 'No description available'}</div>
-                        ${finding.severity ? `<p style="margin-top: 10px;"><strong>Severity:</strong> ${finding.severity.toUpperCase()}</p>` : ''}
-                        ${isSuspicious ? '<p style="margin-top: 5px; color: #f44336;"><strong>⚠️ Status: SUSPICIOUS</strong></p>' : '<p style="margin-top: 5px; color: #4caf50;"><strong>✓ Status: Normal</strong></p>'}
+                        <div class="finding-description">${
+                          finding.description || "No description available"
+                        }</div>
+                        <div class="finding-meta">
+                            ${
+                              finding.severity
+                                ? `<span class="severity-badge severity-${finding.severity.toLowerCase()}">${
+                                    finding.severity
+                                  }</span>`
+                                : ""
+                            }
+                            <span style="color: ${
+                              isSuspicious
+                                ? "var(--danger-color)"
+                                : "var(--success-color)"
+                            }; font-weight: 700;">
+                                ${isSuspicious ? "⚠️ SUSPICIOUS" : "✓ NORMAL"}
+                            </span>
+                        </div>
                     </div>
                 `;
-                }).join('');
-            } else {
-                findingsList.innerHTML = '<p style="color: #4caf50;">✅ No suspicious findings detected.</p>';
-            }
-
-            // Metadata issues
-            if (results.metadata_issues && results.metadata_issues.length > 0) {
-                document.getElementById('metadataSection').innerHTML = `
-                    <div class="metadata-section">
-                        <h3 style="margin-bottom: 15px;">⚙️ Metadata Issues</h3>
-                        ${results.metadata_issues.map(issue => `<p>• ${issue}</p>`).join('')}
-                    </div>
-                `;
-            }
-
-            // Download button - show only if report was generated
-            const downloadBtn = document.getElementById('downloadBtn');
-            if (results.report_filename) {
-                downloadBtn.style.display = 'inline-block';
-                downloadBtn.onclick = () => {
-                    window.location.href = `/download_report/${results.report_filename}`;
-                };
-            } else {
-                downloadBtn.style.display = 'none';
-            }
+            })
+            .join("");
+        } else {
+          findingsList.innerHTML =
+            '<p style="color: var(--success-color); text-align: center; padding: 40px;">✅ No suspicious findings detected</p>';
         }
+
+        if (results.metadata_issues && results.metadata_issues.length > 0) {
+          document.getElementById("metadataSection").innerHTML = `
+                    <h3 class="section-title">⚙️ Metadata Issues</h3>
+                    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning-color); padding: 24px; border-radius: 16px;">
+                        ${results.metadata_issues
+                          .map(
+                            (issue) =>
+                              `<p style="margin-bottom: 8px;">• ${issue}</p>`
+                          )
+                          .join("")}
+                    </div>
+                `;
+        }
+
+        const downloadBtn = document.getElementById("downloadBtn");
+        if (results.report_filename) {
+          downloadBtn.style.display = "block";
+          downloadBtn.onclick = () => {
+            window.location.href = `/download_report/${results.report_filename}`;
+          };
+        } else {
+          downloadBtn.style.display = "none";
+        }
+      }
     </script>
-</body>
+  </body>
 </html>
