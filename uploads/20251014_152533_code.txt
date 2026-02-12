@@ -1,0 +1,3 @@
+def pyu:
+  return 2*2
+print(pyu)

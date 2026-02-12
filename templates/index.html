@@ -186,22 +186,11 @@
         letter-spacing: -0.5px;
       }
 
-      .logo::before {
-        content: "✦";
-        font-size: 28px;
-        background: var(--gradient-main);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+      .logo-icon {
+        width: 28px;
+        height: 28px;
+        color: var(--primary-teal);
         animation: rotate 4s linear infinite;
-      }
-
-      @keyframes rotate {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
       }
 
       .nav-links {
@@ -282,19 +271,8 @@
         box-shadow: 0 4px 24px rgba(45, 212, 191, 0.15);
       }
 
-      .launch-badge::before {
-        content: "→";
+      .launch-icon {
         animation: slideRight 2s ease-in-out infinite;
-      }
-
-      @keyframes slideRight {
-        0%,
-        100% {
-          transform: translateX(0);
-        }
-        50% {
-          transform: translateX(5px);
-        }
       }
 
       .hero-title {
@@ -368,12 +346,68 @@
       }
 
       .cta-icon {
-        font-size: 24px;
+        width: 22px;
+        height: 22px;
         transition: transform 0.3s;
       }
 
       .cta-button:hover .cta-icon {
         transform: scale(1.1) rotate(5deg);
+      }
+
+      /* Icon system */
+      .icon {
+        width: 1em;
+        height: 1em;
+        display: inline-block;
+        vertical-align: -0.15em;
+        color: currentColor;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .icon-fill {
+        fill: currentColor;
+        stroke: none;
+      }
+
+      .icon-sm {
+        width: 16px;
+        height: 16px;
+      }
+
+      .icon-md {
+        width: 20px;
+        height: 20px;
+      }
+
+      .icon-lg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .icon-xl {
+        width: 32px;
+        height: 32px;
+      }
+
+      .icon-xxl {
+        width: 56px;
+        height: 56px;
+      }
+
+      .icon-muted {
+        color: var(--text-muted);
+      }
+
+      .btn-icon,
+      .section-title .icon,
+      .finding-title .icon,
+      .tab .icon {
+        margin-right: 8px;
       }
 
       /* Stats Section */
@@ -469,7 +503,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+      }
+
+      .tech-icon .icon {
+        color: white;
       }
 
       /* Analysis Card */
@@ -626,7 +663,9 @@
       }
 
       .upload-icon {
-        font-size: 72px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         margin-bottom: 28px;
         opacity: 0.6;
         transition: all 0.3s;
@@ -634,7 +673,7 @@
 
       .upload-zone:hover .upload-icon {
         opacity: 1;
-        transform: scale(1.1);
+        transform: scale(1.06);
       }
 
       .upload-text {
@@ -1005,6 +1044,9 @@
         font-weight: 800;
         margin: 56px 0 32px;
         letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
 
       .info-grid {
@@ -1346,10 +1388,83 @@
       <div class="grid-overlay"></div>
     </div>
 
+    <!-- Icon sprite -->
+    <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;">
+      <symbol id="icon-spark" viewBox="0 0 24 24">
+        <path d="M12 2l1.6 4.4L18 8l-4.4 1.6L12 14l-1.6-4.4L6 8l4.4-1.6L12 2z" />
+      </symbol>
+      <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+        <path d="M5 12h14M13 5l6 7-6 7" />
+      </symbol>
+      <symbol id="icon-rocket" viewBox="0 0 24 24">
+        <path d="M5 19c1.5-1.5 4-2 6-2 0 2-0.5 4.5-2 6-2 0-3-1-4-4z" />
+        <path d="M14 10l-4 4" />
+        <path d="M9 9l6-6c3 1 5 3 6 6l-6 6c-2-1-4-3-6-6z" />
+      </symbol>
+      <symbol id="icon-image" viewBox="0 0 24 24">
+        <rect x="3" y="5" width="18" height="14" rx="2" ry="2" />
+        <path d="M8 13l3-3 5 5" />
+        <circle cx="9" cy="9" r="1.5" />
+      </symbol>
+      <symbol id="icon-file-text" viewBox="0 0 24 24">
+        <path d="M6 2h8l4 4v16H6z" />
+        <path d="M14 2v4h4" />
+        <path d="M8 10h8M8 14h8M8 18h6" />
+      </symbol>
+      <symbol id="icon-code" viewBox="0 0 24 24">
+        <path d="M8 16l-4-4 4-4" />
+        <path d="M16 8l4 4-4 4" />
+        <path d="M10 19l4-14" />
+      </symbol>
+      <symbol id="icon-upload" viewBox="0 0 24 24">
+        <path d="M12 16V4" />
+        <path d="M8 8l4-4 4 4" />
+        <path d="M4 20h16" />
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="M20 6L9 17l-5-5" />
+      </symbol>
+      <symbol id="icon-alert" viewBox="0 0 24 24">
+        <path d="M12 9v4" />
+        <path d="M12 17h.01" />
+        <path d="M10.3 3.2L2.8 17.6A2 2 0 0 0 4.6 20h14.8a2 2 0 0 0 1.8-2.9L13.7 3.2a2 2 0 0 0-3.4 0z" />
+      </symbol>
+      <symbol id="icon-info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 10v6" />
+        <path d="M12 7h.01" />
+      </symbol>
+      <symbol id="icon-download" viewBox="0 0 24 24">
+        <path d="M12 3v12" />
+        <path d="M8 11l4 4 4-4" />
+        <path d="M4 19h16" />
+      </symbol>
+      <symbol id="icon-refresh" viewBox="0 0 24 24">
+        <path d="M21 12a9 9 0 1 1-2.6-6.4" />
+        <path d="M21 4v6h-6" />
+      </symbol>
+      <symbol id="icon-cpu" viewBox="0 0 24 24">
+        <rect x="6" y="6" width="12" height="12" rx="2" />
+        <path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4" />
+      </symbol>
+      <symbol id="icon-eye" viewBox="0 0 24 24">
+        <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z" />
+        <circle cx="12" cy="12" r="3" />
+      </symbol>
+      <symbol id="icon-bolt" viewBox="0 0 24 24">
+        <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+      </symbol>
+    </svg>
+
     <div class="container">
       <!-- Navbar -->
       <nav class="navbar">
-        <div class="logo">kaya</div>
+        <div class="logo">
+          <svg class="icon logo-icon" aria-hidden="true">
+            <use href="#icon-spark"></use>
+          </svg>
+          <span>kaya</span>
+        </div>
         <div class="nav-links">
           <a href="#features" class="nav-link">Features</a>
           <a href="#docs" class="nav-link">Documentation</a>
@@ -1360,7 +1475,12 @@
 
       <!-- Hero Section -->
       <section class="hero-section">
-        <div class="launch-badge">AI-Powered Forgery Detection</div>
+        <div class="launch-badge">
+          <svg class="icon icon-sm launch-icon" aria-hidden="true">
+            <use href="#icon-arrow-right"></use>
+          </svg>
+          AI-Powered Forgery Detection
+        </div>
 
         <h1 class="hero-title">
           Detect Fraud, Forgery &<br />
@@ -1374,7 +1494,9 @@
         </p>
 
         <a href="#analyze" class="cta-button">
-          <span class="cta-icon">🚀</span>
+          <svg class="icon cta-icon" aria-hidden="true">
+            <use href="#icon-rocket"></use>
+          </svg>
           <span>Start Analysis</span>
         </a>
       </section>
@@ -1404,19 +1526,35 @@
         <div class="powered-label">POWERED BY ADVANCED AI</div>
         <div class="tech-logos">
           <div class="tech-logo">
-            <div class="tech-icon">🔬</div>
+            <div class="tech-icon">
+              <svg class="icon icon-sm" aria-hidden="true">
+                <use href="#icon-cpu"></use>
+              </svg>
+            </div>
             <span>PyTorch</span>
           </div>
           <div class="tech-logo">
-            <div class="tech-icon">🧠</div>
+            <div class="tech-icon">
+              <svg class="icon icon-sm" aria-hidden="true">
+                <use href="#icon-cpu"></use>
+              </svg>
+            </div>
             <span>TensorFlow</span>
           </div>
           <div class="tech-logo">
-            <div class="tech-icon">👁️</div>
+            <div class="tech-icon">
+              <svg class="icon icon-sm" aria-hidden="true">
+                <use href="#icon-eye"></use>
+              </svg>
+            </div>
             <span>OpenCV</span>
           </div>
           <div class="tech-logo">
-            <div class="tech-icon">⚡</div>
+            <div class="tech-icon">
+              <svg class="icon icon-sm" aria-hidden="true">
+                <use href="#icon-bolt"></use>
+              </svg>
+            </div>
             <span>scikit-learn</span>
           </div>
         </div>
@@ -1434,20 +1572,33 @@
         <!-- Tabs -->
         <div class="tabs">
           <button class="tab active" onclick="switchTab('files')">
-            📄 Images & PDFs
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-image"></use>
+            </svg>
+            Images & PDFs
           </button>
           <button class="tab" onclick="switchTab('codefile')">
-            💾 Code File
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-file-text"></use>
+            </svg>
+            Code File
           </button>
           <button class="tab" onclick="switchTab('codetext')">
-            📝 Paste Code
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-code"></use>
+            </svg>
+            Paste Code
           </button>
         </div>
 
         <!-- Tab Content: Files -->
         <div class="tab-content active" id="files-content">
           <div class="upload-zone" id="uploadZone">
-            <div class="upload-icon">📁</div>
+            <div class="upload-icon">
+              <svg class="icon icon-xxl" aria-hidden="true">
+                <use href="#icon-upload"></use>
+              </svg>
+            </div>
             <div class="upload-text">Drag & drop your file here</div>
             <div class="upload-hint">or click to browse from your device</div>
             <div class="upload-supported">
@@ -1460,7 +1611,9 @@
             accept=".jpg,.jpeg,.png,.bmp,.tiff,.gif,.pdf"
           />
           <div class="selected-file" id="selectedFile">
-            <span>✅</span>
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-check"></use>
+            </svg>
             <span><strong>Selected:</strong> <span id="fileName"></span></span>
           </div>
         </div>
@@ -1468,7 +1621,11 @@
         <!-- Tab Content: Code File -->
         <div class="tab-content" id="codefile-content">
           <div class="upload-zone" id="codeUploadZone">
-            <div class="upload-icon">💻</div>
+            <div class="upload-icon">
+              <svg class="icon icon-xxl" aria-hidden="true">
+                <use href="#icon-upload"></use>
+              </svg>
+            </div>
             <div class="upload-text">Drag & drop your code file</div>
             <div class="upload-hint">Detect AI-generated code patterns</div>
             <div class="upload-supported">
@@ -1481,7 +1638,9 @@
             accept=".py,.js,.java,.cpp,.c,.cs,.rb,.go,.php,.ts,.jsx,.tsx,.html,.css,.sql,.sh,.txt"
           />
           <div class="selected-file" id="selectedCodeFile">
-            <span>✅</span>
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-check"></use>
+            </svg>
             <span
               ><strong>Selected:</strong> <span id="codeFileName"></span
             ></span>
@@ -1554,23 +1713,44 @@ def fibonacci(n):
           <div id="riskLevel"></div>
         </div>
 
-        <h3 class="section-title">📊 File Information</h3>
+        <h3 class="section-title">
+          <svg class="icon icon-md" aria-hidden="true">
+            <use href="#icon-info"></use>
+          </svg>
+          File Information
+        </h3>
         <div class="info-grid" id="fileInfo"></div>
 
-        <h3 class="section-title">🔍 Detection Techniques Applied</h3>
+        <h3 class="section-title">
+          <svg class="icon icon-md" aria-hidden="true">
+            <use href="#icon-cpu"></use>
+          </svg>
+          Detection Techniques Applied
+        </h3>
         <div class="techniques-grid" id="techniquesList"></div>
 
-        <h3 class="section-title">🔎 Detailed Findings</h3>
+        <h3 class="section-title">
+          <svg class="icon icon-md" aria-hidden="true">
+            <use href="#icon-eye"></use>
+          </svg>
+          Detailed Findings
+        </h3>
         <div id="findingsList"></div>
 
         <div id="metadataSection"></div>
 
         <div class="action-buttons">
           <button class="btn-download" id="downloadBtn">
-            📥 Download PDF Report
+            <svg class="icon btn-icon" aria-hidden="true">
+              <use href="#icon-download"></use>
+            </svg>
+            Download PDF Report
           </button>
           <button class="btn-new" onclick="location.reload()">
-            🔄 New Analysis
+            <svg class="icon btn-icon" aria-hidden="true">
+              <use href="#icon-refresh"></use>
+            </svg>
+            New Analysis
           </button>
         </div>
       </div>
@@ -1580,6 +1760,10 @@ def fibonacci(n):
       let currentTab = "files";
       let currentFile = null;
       let currentCodeFile = null;
+
+      function icon(name, className = "") {
+        return `<svg class="icon ${className}" aria-hidden="true"><use href="#${name}"></use></svg>`;
+      }
 
       function switchTab(tabName) {
         currentTab = tabName;
@@ -1730,7 +1914,7 @@ def fibonacci(n):
           document.querySelector(
             ".analysis-card:not(.loading):not(.results)"
           ).style.display = "block";
-          errorMessage.textContent = "❌ " + error.message;
+          errorMessage.innerHTML = `${icon("icon-alert", "icon-sm")} ${error.message}`;
           errorMessage.classList.add("show");
         }
       }
@@ -1755,13 +1939,13 @@ def fibonacci(n):
           resultHeader.classList.remove("clean");
           resultTitle.classList.add("fraud");
           resultTitle.classList.remove("clean");
-          resultTitle.textContent = "⚠️ Forgery Detected";
+          resultTitle.innerHTML = `${icon("icon-alert", "icon-md")} Forgery Detected`;
         } else {
           resultHeader.classList.add("clean");
           resultHeader.classList.remove("fraud");
           resultTitle.classList.add("clean");
           resultTitle.classList.remove("fraud");
-          resultTitle.textContent = "✅ Authentic";
+          resultTitle.innerHTML = `${icon("icon-check", "icon-md")} Authentic`;
         }
 
         confidenceScore.textContent = `${confidence}%`;
@@ -1815,7 +1999,10 @@ def fibonacci(n):
           results.techniques_used
             .map(
               (tech) =>
-                `<div class="technique-item"><span>✓</span><span>${tech}</span></div>`
+                `<div class="technique-item">${icon(
+                  "icon-check",
+                  "icon-sm"
+                )}<span>${tech}</span></div>`
             )
             .join("");
 
@@ -1830,11 +2017,11 @@ def fibonacci(n):
                 finding.inconsistent;
               const severityIcon =
                 {
-                  high: "🔴",
-                  medium: "🟡",
-                  low: "🟢",
-                  info: "ℹ️",
-                }[finding.severity?.toLowerCase()] || "⚪";
+                  high: icon("icon-alert", "icon-sm"),
+                  medium: icon("icon-info", "icon-sm"),
+                  low: icon("icon-check", "icon-sm"),
+                  info: icon("icon-info", "icon-sm"),
+                }[finding.severity?.toLowerCase()] || icon("icon-info", "icon-sm");
 
               return `
                     <div class="finding-item ${
@@ -1860,8 +2047,12 @@ def fibonacci(n):
                               isSuspicious
                                 ? "var(--danger-color)"
                                 : "var(--success-color)"
-                            }; font-weight: 700;">
-                                ${isSuspicious ? "⚠️ SUSPICIOUS" : "✓ NORMAL"}
+                            }; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                                ${
+                                  isSuspicious
+                                    ? `${icon("icon-alert", "icon-sm")} SUSPICIOUS`
+                                    : `${icon("icon-check", "icon-sm")} NORMAL`
+                                }
                             </span>
                         </div>
                     </div>
@@ -1870,12 +2061,15 @@ def fibonacci(n):
             .join("");
         } else {
           findingsList.innerHTML =
-            '<p style="color: var(--success-color); text-align: center; padding: 40px;">✅ No suspicious findings detected</p>';
+            '<p style="color: var(--success-color); text-align: center; padding: 40px;">No suspicious findings detected</p>';
         }
 
         if (results.metadata_issues && results.metadata_issues.length > 0) {
           document.getElementById("metadataSection").innerHTML = `
-                    <h3 class="section-title">⚙️ Metadata Issues</h3>
+                    <h3 class="section-title">${icon(
+                      "icon-info",
+                      "icon-md"
+                    )}Metadata Issues</h3>
                     <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning-color); padding: 24px; border-radius: 16px;">
                         ${results.metadata_issues
                           .map(
