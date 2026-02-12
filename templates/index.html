@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,34 +7,33 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --primary-teal: #2dd4bf;
-        --primary-green: #10b981;
-        --accent-purple: #8b5cf6;
-        --dark-bg: #0a0f1c;
-        --darker-bg: #050a14;
-        --card-bg: rgba(30, 41, 59, 0.4);
-        --card-hover: rgba(30, 41, 59, 0.6);
-        --border-color: rgba(51, 65, 85, 0.5);
-        --text-primary: #f8fafc;
-        --text-secondary: #94a3b8;
-        --text-muted: #64748b;
+        --primary-teal: #f2f2f2;
+        --primary-green: #c6c6c6;
+        --accent-purple: #9f9f9f;
+        --dark-bg: #0a0a0a;
+        --darker-bg: #040404;
+        --card-bg: rgba(14, 14, 14, 0.82);
+        --card-hover: rgba(28, 28, 28, 0.9);
+        --border-color: rgba(255, 255, 255, 0.14);
+        --text-primary: #f2f2f2;
+        --text-secondary: #bdbdbd;
+        --text-muted: #8c8c8c;
         --gradient-main: linear-gradient(
           135deg,
-          #0f766e 0%,
-          #14b8a6 25%,
-          #2dd4bf 50%,
-          #5eead4 100%
+          #f2f2f2 0%,
+          #c6c6c6 50%,
+          #8f8f8f 100%
         );
-        --gradient-purple: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-        --success-color: #10b981;
-        --danger-color: #ef4444;
-        --warning-color: #f59e0b;
-        --glass-bg: rgba(15, 23, 42, 0.6);
+        --gradient-purple: linear-gradient(135deg, #e8e8e8 0%, #9e9e9e 100%);
+        --success-color: #d0d0d0;
+        --danger-color: #b3b3b3;
+        --warning-color: #9a9a9a;
+        --glass-bg: rgba(10, 10, 10, 0.82);
         --glass-border: rgba(255, 255, 255, 0.1);
       }
 
@@ -45,9 +44,24 @@
       }
 
       body {
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        font-family:
+          "Space Grotesk",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
           sans-serif;
-        background: var(--dark-bg);
+        background:
+          radial-gradient(
+            1200px 600px at 15% -10%,
+            rgba(255, 255, 255, 0.1),
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 500px at 85% 0%,
+            rgba(255, 255, 255, 0.06),
+            transparent 60%
+          ),
+          var(--dark-bg);
         color: var(--text-primary);
         min-height: 100vh;
         overflow-x: hidden;
@@ -85,7 +99,7 @@
         height: 600px;
         background: radial-gradient(
           circle,
-          rgba(20, 184, 166, 0.3) 0%,
+          rgba(255, 255, 255, 0.2) 0%,
           transparent 70%
         );
         top: -10%;
@@ -98,7 +112,7 @@
         height: 700px;
         background: radial-gradient(
           circle,
-          rgba(45, 212, 191, 0.25) 0%,
+          rgba(255, 255, 255, 0.18) 0%,
           transparent 70%
         );
         top: 30%;
@@ -111,7 +125,7 @@
         height: 500px;
         background: radial-gradient(
           circle,
-          rgba(16, 185, 129, 0.2) 0%,
+          rgba(255, 255, 255, 0.12) 0%,
           transparent 70%
         );
         bottom: -10%;
@@ -136,11 +150,9 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        background-image: linear-gradient(
-            rgba(45, 212, 191, 0.03) 1px,
-            transparent 1px
-          ),
-          linear-gradient(90deg, rgba(45, 212, 191, 0.03) 1px, transparent 1px);
+        background-image:
+          linear-gradient(rgba(148, 163, 184, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
         background-size: 50px 50px;
         mask-image: radial-gradient(
           ellipse 80% 50% at 50% 50%,
@@ -229,11 +241,11 @@
       }
 
       .btn-signup {
-        background: var(--card-bg);
-        color: var(--text-primary);
-        padding: 10px 20px;
+        background: var(--gradient-main);
+        color: #0b1020;
+        padding: 10px 18px;
+        border: none;
         border-radius: 12px;
-        border: 1px solid var(--border-color);
         font-weight: 600;
         font-size: 14px;
         cursor: pointer;
@@ -242,9 +254,9 @@
 
       .btn-signup:hover {
         background: var(--card-hover);
-        border-color: var(--primary-teal);
+        border-color: transparent;
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(45, 212, 191, 0.2);
+        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.18);
       }
 
       /* Hero Section */
@@ -268,7 +280,7 @@
         color: var(--primary-teal);
         -webkit-backdrop-filter: blur(20px);
         backdrop-filter: blur(20px);
-        box-shadow: 0 4px 24px rgba(45, 212, 191, 0.15);
+        box-shadow: 0 4px 24px rgba(255, 255, 255, 0.12);
       }
 
       .launch-icon {
@@ -306,7 +318,7 @@
         align-items: center;
         gap: 12px;
         background: var(--gradient-main);
-        color: white;
+        color: #0a0a0a;
         padding: 18px 48px;
         border-radius: 16px;
         border: none;
@@ -314,7 +326,7 @@
         font-size: 16px;
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 16px 48px rgba(45, 212, 191, 0.35);
+        box-shadow: 0 16px 48px rgba(255, 255, 255, 0.22);
         text-decoration: none;
         position: relative;
         overflow: hidden;
@@ -342,7 +354,7 @@
 
       .cta-button:hover {
         transform: translateY(-4px);
-        box-shadow: 0 24px 64px rgba(45, 212, 191, 0.45);
+        box-shadow: 0 24px 64px rgba(255, 255, 255, 0.28);
       }
 
       .cta-icon {
@@ -432,7 +444,7 @@
       .stat-card:hover {
         transform: translateY(-4px);
         border-color: var(--primary-teal);
-        box-shadow: 0 12px 40px rgba(45, 212, 191, 0.2);
+        box-shadow: 0 12px 40px rgba(255, 255, 255, 0.18);
       }
 
       .stat-value {
@@ -593,8 +605,8 @@
 
       .tab.active {
         background: var(--gradient-main);
-        color: white;
-        box-shadow: 0 8px 24px rgba(45, 212, 191, 0.4);
+        color: #0a0a0a;
+        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.25);
         transform: translateY(-2px);
       }
 
@@ -638,7 +650,8 @@
         border-radius: 24px;
         padding: 2px;
         background: transparent;
-        -webkit-mask: linear-gradient(#fff 0 0) content-box,
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
           linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
@@ -647,7 +660,7 @@
 
       .upload-zone:hover {
         border-color: var(--primary-teal);
-        background: rgba(45, 212, 191, 0.05);
+        background: rgba(255, 255, 255, 0.04);
         transform: translateY(-4px);
       }
 
@@ -657,9 +670,9 @@
 
       .upload-zone.dragover {
         border-color: var(--primary-teal);
-        background: rgba(45, 212, 191, 0.1);
+        background: rgba(255, 255, 255, 0.08);
         transform: scale(1.02);
-        box-shadow: 0 16px 48px rgba(45, 212, 191, 0.2);
+        box-shadow: 0 16px 48px rgba(255, 255, 255, 0.18);
       }
 
       .upload-icon {
@@ -740,7 +753,7 @@
       .language-selector select:focus {
         outline: none;
         border-color: var(--primary-teal);
-        box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15);
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
       }
 
       .code-editor {
@@ -751,8 +764,8 @@
         border: 1px solid var(--border-color);
         border-radius: 20px;
         color: var(--text-primary);
-        font-family: "JetBrains Mono", "Fira Code", "Consolas", "Monaco",
-          monospace;
+        font-family:
+          "JetBrains Mono", "Fira Code", "Consolas", "Monaco", monospace;
         font-size: 14px;
         line-height: 1.7;
         resize: vertical;
@@ -768,7 +781,7 @@
       .code-editor:focus {
         outline: none;
         border-color: var(--primary-teal);
-        box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.15);
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
         background: rgba(5, 10, 20, 0.8);
       }
 
@@ -779,8 +792,8 @@
       /* Selected File Display */
       .selected-file {
         display: none;
-        background: rgba(16, 185, 129, 0.1);
-        border: 1px solid rgba(16, 185, 129, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 16px;
         padding: 20px 28px;
         margin: 28px 0;
@@ -811,7 +824,7 @@
       .btn-primary {
         width: 100%;
         background: var(--gradient-main);
-        color: white;
+        color: #0a0a0a;
         padding: 20px 48px;
         border-radius: 16px;
         border: none;
@@ -819,7 +832,7 @@
         font-size: 17px;
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 12px 32px rgba(45, 212, 191, 0.35);
+        box-shadow: 0 12px 32px rgba(255, 255, 255, 0.22);
         margin-top: 32px;
         position: relative;
         overflow: hidden;
@@ -847,7 +860,7 @@
 
       .btn-primary:hover:not(:disabled) {
         transform: translateY(-3px);
-        box-shadow: 0 16px 48px rgba(45, 212, 191, 0.45);
+        box-shadow: 0 16px 48px rgba(255, 255, 255, 0.28);
       }
 
       .btn-primary:active:not(:disabled) {
@@ -991,13 +1004,13 @@
       }
 
       .result-header.fraud {
-        background: rgba(239, 68, 68, 0.1);
+        background: rgba(255, 255, 255, 0.08);
         border-color: var(--danger-color);
         color: var(--danger-color);
       }
 
       .result-header.clean {
-        background: rgba(16, 185, 129, 0.1);
+        background: rgba(255, 255, 255, 0.08);
         border-color: var(--success-color);
         color: var(--success-color);
       }
@@ -1069,7 +1082,7 @@
       .info-item:hover {
         border-color: var(--primary-teal);
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(45, 212, 191, 0.15);
+        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.12);
       }
 
       .info-label {
@@ -1094,8 +1107,8 @@
       }
 
       .technique-item {
-        background: rgba(16, 185, 129, 0.1);
-        border: 1px solid rgba(16, 185, 129, 0.3);
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 18px 24px;
         border-radius: 16px;
         color: var(--success-color);
@@ -1109,7 +1122,7 @@
 
       .technique-item:hover {
         transform: translateX(4px);
-        background: rgba(16, 185, 129, 0.15);
+        background: rgba(255, 255, 255, 0.12);
       }
 
       .finding-item {
@@ -1131,7 +1144,7 @@
 
       .finding-item.suspicious {
         border-left-color: var(--danger-color);
-        background: rgba(239, 68, 68, 0.05);
+        background: rgba(255, 255, 255, 0.04);
       }
 
       .finding-title {
@@ -1168,21 +1181,21 @@
       }
 
       .severity-high {
-        background: rgba(239, 68, 68, 0.2);
+        background: rgba(255, 255, 255, 0.16);
         color: var(--danger-color);
-        border: 1px solid rgba(239, 68, 68, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.22);
       }
 
       .severity-medium {
-        background: rgba(245, 158, 11, 0.2);
+        background: rgba(255, 255, 255, 0.12);
         color: var(--warning-color);
-        border: 1px solid rgba(245, 158, 11, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
       }
 
       .severity-low {
-        background: rgba(16, 185, 129, 0.2);
+        background: rgba(255, 255, 255, 0.14);
         color: var(--success-color);
-        border: 1px solid rgba(16, 185, 129, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
       }
 
       .action-buttons {
@@ -1196,7 +1209,7 @@
         flex: 1;
         min-width: 220px;
         background: var(--gradient-main);
-        color: white;
+        color: #0a0a0a;
         padding: 18px 36px;
         border-radius: 16px;
         border: none;
@@ -1204,12 +1217,12 @@
         font-size: 16px;
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 8px 32px rgba(45, 212, 191, 0.3);
+        box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
       }
 
       .btn-download:hover {
         transform: translateY(-3px);
-        box-shadow: 0 12px 40px rgba(45, 212, 191, 0.4);
+        box-shadow: 0 12px 40px rgba(255, 255, 255, 0.25);
       }
 
       .btn-new {
@@ -1232,12 +1245,12 @@
         border-color: var(--primary-teal);
         background: var(--card-hover);
         transform: translateY(-3px);
-        box-shadow: 0 8px 24px rgba(45, 212, 191, 0.2);
+        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.18);
       }
 
       .error-message {
         display: none;
-        background: rgba(239, 68, 68, 0.1);
+        background: rgba(255, 255, 255, 0.08);
         border: 2px solid var(--danger-color);
         color: var(--danger-color);
         padding: 24px 28px;
@@ -1376,6 +1389,300 @@
           padding: 24px 16px;
         }
       }
+
+      .section-block {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 40px;
+        margin: 56px 0;
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+      }
+
+      .section-block h2 {
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+      }
+
+      .section-block p {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        font-size: 16px;
+        margin-bottom: 16px;
+      }
+
+      .feature-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        margin-top: 24px;
+      }
+
+      .feature-item {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 18px 20px;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .feature-item strong {
+        color: var(--text-primary);
+        font-weight: 700;
+      }
+
+      .footer {
+        margin: 80px 0 32px;
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--border-color);
+        padding: 36px 0 0;
+        display: grid;
+        gap: 28px;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+      }
+
+      .footer-brand {
+        font-weight: 800;
+        font-size: 18px;
+        letter-spacing: -0.4px;
+      }
+
+      .footer-text {
+        color: var(--text-muted);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-top: 10px;
+      }
+
+      .footer-title {
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+      }
+
+      .footer-links {
+        display: grid;
+        gap: 10px;
+      }
+
+      .footer-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .footer-links span {
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .footer-links a:hover {
+        color: var(--text-primary);
+      }
+
+      .footer-bottom {
+        border-top: 1px solid var(--border-color);
+        padding: 18px 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(3, 6, 12, 0.8);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.25s ease;
+        z-index: 20;
+      }
+
+      .modal-backdrop.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        z-index: 21;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.25s ease;
+      }
+
+      .modal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-card {
+        width: min(720px, 100%);
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 28px 28px 24px;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+        position: relative;
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .modal-title {
+        font-size: 22px;
+        font-weight: 800;
+      }
+
+      .modal-close {
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 8px;
+      }
+
+      .modal-close:hover {
+        color: var(--text-primary);
+        background: var(--card-hover);
+      }
+
+      .modal-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .modal-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .modal-link:hover {
+        background: var(--card-hover);
+        border-color: var(--primary-teal);
+      }
+
+      .modal-secondary {
+        margin-top: 16px;
+        color: var(--text-secondary);
+        font-size: 14px;
+      }
+
+      .modal-secondary button {
+        border: 1px dashed var(--border-color);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text-primary);
+        font-weight: 700;
+        cursor: pointer;
+        padding: 10px 14px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .modal-secondary button:hover {
+        border-color: var(--primary-teal);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .modal-form {
+        display: grid;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .modal-form label {
+        font-size: 13px;
+        color: var(--text-secondary);
+        font-weight: 600;
+      }
+
+      .modal-form input,
+      .modal-form textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        background: var(--card-bg);
+        color: var(--text-primary);
+        font-size: 14px;
+      }
+
+      .modal-form textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .modal-form button {
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: none;
+        background: var(--gradient-main);
+        color: #0b1020;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .modal-form button:hover {
+        filter: brightness(1.05);
+      }
+
+      .modal-status {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-top: 8px;
+      }
+
+      @media (max-width: 768px) {
+        /* ...existing code... */
+        .section-block {
+          padding: 28px 20px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -1389,45 +1696,70 @@
     </div>
 
     <!-- Icon sprite -->
-    <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;">
+    <svg
+      aria-hidden="true"
+      style="position: absolute; width: 0; height: 0; overflow: hidden"
+    >
       <symbol id="icon-spark" viewBox="0 0 24 24">
-        <path d="M12 2l1.6 4.4L18 8l-4.4 1.6L12 14l-1.6-4.4L6 8l4.4-1.6L12 2z" />
+        <path d="M12 3v4M12 17v4M4 12h4M16 12h4" />
+        <path
+          d="M6.5 6.5l2.8 2.8M14.7 14.7l2.8 2.8M17.5 6.5l-2.8 2.8M9.3 14.7l-2.8 2.8"
+        />
+        <circle cx="12" cy="12" r="2.5" />
       </symbol>
       <symbol id="icon-arrow-right" viewBox="0 0 24 24">
-        <path d="M5 12h14M13 5l6 7-6 7" />
+        <path d="M4 12h12" />
+        <path d="M13 6l6 6-6 6" />
       </symbol>
       <symbol id="icon-rocket" viewBox="0 0 24 24">
-        <path d="M5 19c1.5-1.5 4-2 6-2 0 2-0.5 4.5-2 6-2 0-3-1-4-4z" />
-        <path d="M14 10l-4 4" />
-        <path d="M9 9l6-6c3 1 5 3 6 6l-6 6c-2-1-4-3-6-6z" />
+        <path d="M12 2c4 1 7 4 8 8-3 1-6 4-7 8-4-1-7-4-8-8 3-1 6-4 7-8z" />
+        <circle cx="14.5" cy="8.5" r="1.5" />
+        <path d="M7 17l-3 3" />
+        <path d="M8.5 13.5L10.5 15.5" />
       </symbol>
       <symbol id="icon-image" viewBox="0 0 24 24">
-        <rect x="3" y="5" width="18" height="14" rx="2" ry="2" />
-        <path d="M8 13l3-3 5 5" />
-        <circle cx="9" cy="9" r="1.5" />
+        <rect x="3" y="4" width="18" height="16" rx="2" />
+        <path d="M7 15l3-3 3 3 4-4 3 4" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
       </symbol>
       <symbol id="icon-file-text" viewBox="0 0 24 24">
-        <path d="M6 2h8l4 4v16H6z" />
-        <path d="M14 2v4h4" />
-        <path d="M8 10h8M8 14h8M8 18h6" />
+        <path d="M7 2h7l5 5v15H7z" />
+        <path d="M14 2v5h5" />
+        <path d="M9 11h8M9 15h8M9 19h5" />
       </symbol>
       <symbol id="icon-code" viewBox="0 0 24 24">
-        <path d="M8 16l-4-4 4-4" />
-        <path d="M16 8l4 4-4 4" />
-        <path d="M10 19l4-14" />
+        <path d="M7 8l-4 4 4 4" />
+        <path d="M17 8l4 4-4 4" />
+        <path d="M10 20l4-16" />
       </symbol>
       <symbol id="icon-upload" viewBox="0 0 24 24">
-        <path d="M12 16V4" />
-        <path d="M8 8l4-4 4 4" />
-        <path d="M4 20h16" />
+        <path d="M12 3v10" />
+        <path d="M8 7l4-4 4 4" />
+        <path d="M4 17v3h16v-3" />
       </symbol>
       <symbol id="icon-check" viewBox="0 0 24 24">
-        <path d="M20 6L9 17l-5-5" />
+        <circle cx="12" cy="12" r="9" />
+        <path d="M8.5 12.5l2.5 2.5 5-6" />
       </symbol>
       <symbol id="icon-alert" viewBox="0 0 24 24">
-        <path d="M12 9v4" />
-        <path d="M12 17h.01" />
-        <path d="M10.3 3.2L2.8 17.6A2 2 0 0 0 4.6 20h14.8a2 2 0 0 0 1.8-2.9L13.7 3.2a2 2 0 0 0-3.4 0z" />
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7v6" />
+        <path d="M12 16h.01" />
+      </symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <path d="M6 6l12 12" />
+        <path d="M18 6l-12 12" />
+      </symbol>
+      <symbol id="icon-mail" viewBox="0 0 24 24">
+        <path d="M4 6h16v12H4z" />
+        <path d="M4 7l8 6 8-6" />
+      </symbol>
+      <symbol id="icon-linkedin" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="3" />
+        <path d="M8 10v7" />
+        <path d="M8 7h.01" />
+        <path d="M12 17v-4a2 2 0 0 1 4 0v4" />
+        <path d="M12 10v7" />
       </symbol>
       <symbol id="icon-info" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="9" />
@@ -1435,24 +1767,26 @@
         <path d="M12 7h.01" />
       </symbol>
       <symbol id="icon-download" viewBox="0 0 24 24">
-        <path d="M12 3v12" />
-        <path d="M8 11l4 4 4-4" />
-        <path d="M4 19h16" />
+        <path d="M12 4v10" />
+        <path d="M8 10l4 4 4-4" />
+        <path d="M4 18v2h16v-2" />
       </symbol>
       <symbol id="icon-refresh" viewBox="0 0 24 24">
-        <path d="M21 12a9 9 0 1 1-2.6-6.4" />
-        <path d="M21 4v6h-6" />
+        <path d="M20 6v5h-5" />
+        <path d="M20 11a8 8 0 1 0 2 5" />
       </symbol>
       <symbol id="icon-cpu" viewBox="0 0 24 24">
-        <rect x="6" y="6" width="12" height="12" rx="2" />
-        <path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4" />
+        <rect x="7" y="7" width="10" height="10" rx="2" />
+        <path d="M4 9h2M4 15h2M18 9h2M18 15h2M9 4v2M15 4v2M9 18v2M15 18v2" />
       </symbol>
       <symbol id="icon-eye" viewBox="0 0 24 24">
-        <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z" />
-        <circle cx="12" cy="12" r="3" />
+        <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z" />
+        <circle cx="12" cy="12" r="3.2" />
+        <circle cx="12" cy="12" r="1" />
       </symbol>
       <symbol id="icon-bolt" viewBox="0 0 24 24">
-        <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 6l-3 6h3l-1 6 5-8h-3l1-4z" />
       </symbol>
     </svg>
 
@@ -1466,10 +1800,13 @@
           <span>kaya</span>
         </div>
         <div class="nav-links">
-          <a href="#features" class="nav-link">Features</a>
-          <a href="#docs" class="nav-link">Documentation</a>
-          <a href="#pricing" class="nav-link">Pricing</a>
-          <button class="btn-signup">Get Started</button>
+          <a href="#features" class="nav-link" data-modal="featuresModal"
+            >Features</a
+          >
+          <a href="/documentation" class="nav-link">Documentation</a>
+          <button class="btn-signup" data-modal="contactModal">
+            Contact Us
+          </button>
         </div>
       </nav>
 
@@ -1559,6 +1896,48 @@
           </div>
         </div>
       </div>
+
+      <section class="section-block" id="features">
+        <h2>Features</h2>
+        <p>
+          End-to-end forgery detection for images, PDFs, and code with
+          explainable findings and optional reports.
+        </p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-eye"></use>
+            </svg>
+            <div>
+              <strong>Image Forensics</strong> ELA, noise, and artifacts.
+            </div>
+          </div>
+          <div class="feature-item">
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-file-text"></use>
+            </svg>
+            <div>
+              <strong>PDF Analysis</strong> Metadata and structure checks.
+            </div>
+          </div>
+          <div class="feature-item">
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-code"></use>
+            </svg>
+            <div>
+              <strong>Code Detection</strong> AI-generated pattern signals.
+            </div>
+          </div>
+          <div class="feature-item">
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-alert"></use>
+            </svg>
+            <div>
+              <strong>Risk Scoring</strong> Clear severity categorization.
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- Analysis Card -->
       <div class="analysis-card" id="analyze">
@@ -1754,6 +2133,160 @@ def fibonacci(n):
           </button>
         </div>
       </div>
+
+      <section class="section-block" id="contact">
+        <h2>Contact</h2>
+        <p>
+          Want a demo or custom workflow? Reach out and we will help you set up
+          a tailored analysis pipeline.
+        </p>
+        <p>
+          Email:
+          <a href="mailto:your-email@example.com">your-email@example.com</a>
+        </p>
+      </section>
+
+      <footer class="footer">
+        <div class="site-footer">
+          <div class="footer-grid">
+            <div>
+              <div class="footer-brand">Kaya</div>
+              <div class="footer-text">
+                AI-powered forgery detection for images, PDFs, and code. Built
+                for fast verification and clear reporting.
+              </div>
+            </div>
+            <div>
+              <div class="footer-title">Product</div>
+              <div class="footer-links">
+                <a href="#features">Features</a>
+                <a href="#analyze">Analyze</a>
+                <a href="/documentation">Documentation</a>
+              </div>
+            </div>
+            <div>
+              <div class="footer-title">Company</div>
+              <div class="footer-links">
+                <a href="#contact">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms</a>
+              </div>
+            </div>
+            <div>
+              <div class="footer-title">Team</div>
+              <div class="footer-links">
+                <span>Yash</span>
+                <span>Saurav</span>
+                <span>Teena</span>
+                <span>Tanya</span>
+              </div>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <span>© 2026 Kaya. All rights reserved.</span>
+            <span>
+              GitHub:
+              <a
+                href="https://github.com/yashsinghal1234/Kaya-Forgery_Detection"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                yashsinghal1234/Kaya-Forgery_Detection
+              </a>
+            </span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+
+    <div class="modal" id="featuresModal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Features</div>
+          <button class="modal-close" data-close-modal>
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-close"></use>
+            </svg>
+          </button>
+        </div>
+        <p>
+          Kaya analyzes images, PDFs, and code with multiple forensic checks to
+          surface tampering signals and AI-generated patterns.
+        </p>
+        <p>
+          You get a confidence score, risk level, and detailed findings with
+          optional PDF reporting.
+        </p>
+      </div>
+    </div>
+
+    <div class="modal" id="contactModal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Contact</div>
+          <button class="modal-close" data-close-modal>
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-close"></use>
+            </svg>
+          </button>
+        </div>
+        <p>Reach out via email or LinkedIn. We respond within 24 hours.</p>
+        <div class="modal-actions">
+          <a class="modal-link" href="mailto:your-email@example.com">
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-mail"></use>
+            </svg>
+            Send Email
+          </a>
+          <a
+            class="modal-link"
+            href="https://www.linkedin.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-linkedin"></use>
+            </svg>
+            Message on LinkedIn
+          </a>
+        </div>
+        <div class="modal-secondary">
+          <button type="button" data-modal="messageModal">
+            Write a message
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="messageModal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Send a Message</div>
+          <button class="modal-close" data-close-modal>
+            <svg class="icon icon-sm" aria-hidden="true">
+              <use href="#icon-close"></use>
+            </svg>
+          </button>
+        </div>
+        <form class="modal-form" id="contactForm">
+          <div>
+            <label for="contactName">Name</label>
+            <input id="contactName" name="name" type="text" required />
+          </div>
+          <div>
+            <label for="contactEmail">Email</label>
+            <input id="contactEmail" name="email" type="email" required />
+          </div>
+          <div>
+            <label for="contactMessage">Message</label>
+            <textarea id="contactMessage" name="message" required></textarea>
+          </div>
+          <button type="submit">Send</button>
+          <div class="modal-status" id="contactStatus"></div>
+        </form>
+      </div>
     </div>
 
     <script>
@@ -1802,7 +2335,7 @@ def fibonacci(n):
         uploadZone.classList.add("dragover");
       });
       uploadZone.addEventListener("dragleave", () =>
-        uploadZone.classList.remove("dragover")
+        uploadZone.classList.remove("dragover"),
       );
       uploadZone.addEventListener("drop", (e) => {
         e.preventDefault();
@@ -1835,7 +2368,7 @@ def fibonacci(n):
         codeUploadZone.classList.add("dragover");
       });
       codeUploadZone.addEventListener("dragleave", () =>
-        codeUploadZone.classList.remove("dragover")
+        codeUploadZone.classList.remove("dragover"),
       );
       codeUploadZone.addEventListener("drop", (e) => {
         e.preventDefault();
@@ -1870,7 +2403,7 @@ def fibonacci(n):
         const errorMessage = document.getElementById("errorMessage");
 
         document.querySelector(
-          ".analysis-card:not(.loading):not(.results)"
+          ".analysis-card:not(.loading):not(.results)",
         ).style.display = "none";
         loadingSection.classList.add("show");
         errorMessage.classList.remove("show");
@@ -1878,7 +2411,7 @@ def fibonacci(n):
         try {
           const formData = new FormData();
           const generateReport = document.getElementById(
-            "generateReportCheckbox"
+            "generateReportCheckbox",
           ).checked;
           formData.append("generate_report", generateReport);
 
@@ -1912,7 +2445,7 @@ def fibonacci(n):
           console.error("Error:", error);
           loadingSection.classList.remove("show");
           document.querySelector(
-            ".analysis-card:not(.loading):not(.results)"
+            ".analysis-card:not(.loading):not(.results)",
           ).style.display = "block";
           errorMessage.innerHTML = `${icon("icon-alert", "icon-sm")} ${error.message}`;
           errorMessage.classList.add("show");
@@ -1981,7 +2514,7 @@ def fibonacci(n):
                 <div class="info-item">
                     <div class="info-label">Analyzed</div>
                     <div class="info-value">${new Date(
-                      fileInfo.upload_time
+                      fileInfo.upload_time,
                     ).toLocaleString()}</div>
                 </div>
                 ${
@@ -2001,8 +2534,8 @@ def fibonacci(n):
               (tech) =>
                 `<div class="technique-item">${icon(
                   "icon-check",
-                  "icon-sm"
-                )}<span>${tech}</span></div>`
+                  "icon-sm",
+                )}<span>${tech}</span></div>`,
             )
             .join("");
 
@@ -2021,7 +2554,8 @@ def fibonacci(n):
                   medium: icon("icon-info", "icon-sm"),
                   low: icon("icon-check", "icon-sm"),
                   info: icon("icon-info", "icon-sm"),
-                }[finding.severity?.toLowerCase()] || icon("icon-info", "icon-sm");
+                }[finding.severity?.toLowerCase()] ||
+                icon("icon-info", "icon-sm");
 
               return `
                     <div class="finding-item ${
@@ -2029,8 +2563,8 @@ def fibonacci(n):
                     }">
                         <div class="finding-title">
                             ${severityIcon} ${
-                finding.type || finding.technique || "Finding"
-              }
+                              finding.type || finding.technique || "Finding"
+                            }
                         </div>
                         <div class="finding-description">${
                           finding.description || "No description available"
@@ -2068,13 +2602,13 @@ def fibonacci(n):
           document.getElementById("metadataSection").innerHTML = `
                     <h3 class="section-title">${icon(
                       "icon-info",
-                      "icon-md"
+                      "icon-md",
                     )}Metadata Issues</h3>
-                    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning-color); padding: 24px; border-radius: 16px;">
+                    <div style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--warning-color); padding: 24px; border-radius: 16px;">
                         ${results.metadata_issues
                           .map(
                             (issue) =>
-                              `<p style="margin-bottom: 8px;">• ${issue}</p>`
+                              `<p style="margin-bottom: 8px;">• ${issue}</p>`,
                           )
                           .join("")}
                     </div>
@@ -2090,6 +2624,52 @@ def fibonacci(n):
         } else {
           downloadBtn.style.display = "none";
         }
+      }
+
+      const modalBackdrop = document.getElementById("modalBackdrop");
+      const modals = document.querySelectorAll(".modal");
+
+      function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) {
+          return;
+        }
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+        modalBackdrop.classList.add("show");
+      }
+
+      function closeModals() {
+        modals.forEach((modal) => {
+          modal.classList.remove("show");
+          modal.setAttribute("aria-hidden", "true");
+        });
+        modalBackdrop.classList.remove("show");
+      }
+
+      document.querySelectorAll("[data-modal]").forEach((trigger) => {
+        trigger.addEventListener("click", (event) => {
+          event.preventDefault();
+          const modalId = trigger.getAttribute("data-modal");
+          closeModals();
+          openModal(modalId);
+        });
+      });
+
+      document.querySelectorAll("[data-close-modal]").forEach((trigger) => {
+        trigger.addEventListener("click", closeModals);
+      });
+
+      modalBackdrop.addEventListener("click", closeModals);
+
+      const contactForm = document.getElementById("contactForm");
+      const contactStatus = document.getElementById("contactStatus");
+      if (contactForm) {
+        contactForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          contactStatus.textContent = "Thanks! Your message is ready to send.";
+          contactForm.reset();
+        });
       }
     </script>
   </body>

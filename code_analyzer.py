@@ -1,6 +1,6 @@
 """
 AI-Generated Code Detection Module
-Detects whether code is written by humans or AI using multiple techniques
+Hybrid ML + Heuristic approach for detecting AI-generated code
 """
 import re
 import ast
@@ -8,6 +8,14 @@ import os
 from collections import Counter
 from datetime import datetime
 import hashlib
+
+# Try to import ML analyzer
+try:
+    from ml_code_analyzer import MLCodeAnalyzer
+    ML_AVAILABLE = True
+except ImportError:
+    ML_AVAILABLE = False
+    print("[!] ML Code Analyzer not available. Using heuristic analysis only.")
 
 
 class CodeAnalyzer:
@@ -22,6 +30,15 @@ class CodeAnalyzer:
             'suspicious_patterns': [],
             'code_quality_metrics': {}
         }
+        
+        # Initialize ML analyzer if available
+        self.ml_analyzer = None
+        if ML_AVAILABLE:
+            try:
+                self.ml_analyzer = MLCodeAnalyzer()
+                print("[+] ML Code Analyzer loaded successfully")
+            except Exception as e:
+                print(f"[!] Failed to load ML analyzer: {e}")
 
     def analyze_code(self, code_text, language='auto'):
         """Main analysis pipeline for code detection"""
@@ -29,6 +46,39 @@ class CodeAnalyzer:
 
         if language == 'auto':
             language = self.detect_language(code_text)
+        
+        # Try ML analysis first
+        if self.ml_analyzer:
+            try:
+                print("[*] Using ML-based analysis...")
+                ml_results = self.ml_analyzer.analyze(code_text, language)
+                
+                # Merge ML results with heuristic findings for comprehensive analysis
+                self.results = ml_results
+                
+                # Add additional heuristic checks
+                self._add_heuristic_findings(code_text, language)
+                
+                print(f"[+] ML analysis complete. AI-generated confidence: {self.results['confidence_score']:.2%}")
+                return self.results
+            except Exception as e:
+                print(f"[!] ML analysis failed: {e}. Falling back to heuristics.")
+        
+        # Fallback to heuristic analysis
+        return self._heuristic_analysis(code_text, language)
+    
+    def _add_heuristic_findings(self, code_text, language):
+        """Add additional heuristic findings to ML results"""
+        # Check for specific AI patterns not caught by ML
+        ai_patterns = self.detect_ai_patterns(code_text, language)
+        if ai_patterns.get('detected') and ai_patterns not in self.results['findings']:
+            self.results['findings'].append(ai_patterns)
+            if 'AI Pattern Detection (Heuristic)' not in self.results['techniques_used']:
+                self.results['techniques_used'].append('AI Pattern Detection (Heuristic)')
+    
+    def _heuristic_analysis(self, code_text, language):
+        """Traditional heuristic-based analysis"""
+        print("[*] Using heuristic analysis...")
 
         self.results['language'] = language
 

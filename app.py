@@ -60,6 +60,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/documentation')
+def documentation():
+    """Documentation page"""
+    return render_template('docs.html')
+
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     """Handle file upload and initiate analysis"""
