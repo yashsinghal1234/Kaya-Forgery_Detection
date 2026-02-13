@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -44,9 +44,14 @@
       }
 
       body {
-        font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont,
-          "Segoe UI", sans-serif;
-        background: radial-gradient(
+        font-family:
+          "Space Grotesk",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background:
+          radial-gradient(
             1200px 600px at 15% -10%,
             rgba(255, 255, 255, 0.12),
             transparent 60%
@@ -257,6 +262,112 @@
         color: var(--text-muted);
       }
 
+      .mini-card {
+        cursor: pointer;
+        transition:
+          transform 0.2s ease,
+          border-color 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .mini-card:hover {
+        border-color: var(--primary-teal);
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-2px);
+      }
+
+      .step-list {
+        margin-top: 14px;
+        padding-left: 18px;
+        display: grid;
+        gap: 10px;
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .step-list li {
+        margin-left: 6px;
+      }
+
+      .tech-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 2, 2, 0.8);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease;
+        z-index: 30;
+      }
+
+      .tech-modal-backdrop.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .tech-modal {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease;
+        z-index: 31;
+      }
+
+      .tech-modal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .tech-modal-card {
+        width: min(720px, 100%);
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        padding: 24px;
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      }
+
+      .tech-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .tech-modal-title {
+        font-size: 22px;
+        font-weight: 800;
+      }
+
+      .tech-modal-close {
+        border: none;
+        background: var(--card-bg);
+        color: var(--text-primary);
+        border-radius: 10px;
+        padding: 6px 10px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .tech-modal-body {
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .tech-modal-body ul {
+        margin: 12px 0 0 18px;
+        display: grid;
+        gap: 8px;
+      }
+
       code {
         font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
         font-size: 13px;
@@ -298,6 +409,7 @@
         <aside class="sidebar">
           <h3>Sections</h3>
           <a href="#overview">Overview</a>
+          <a href="#algorithm">Algorithm Flow</a>
           <a href="#image">Image Forensics</a>
           <a href="#pdf">PDF Forensics</a>
           <a href="#code">Code Detection</a>
@@ -329,63 +441,97 @@
             </div>
           </section>
 
+          <section class="doc-card" id="algorithm">
+            <h2>Algorithm Flow</h2>
+            <p>
+              Kaya follows a deterministic pipeline so results are repeatable
+              and explainable. Each analyzer emits structured findings that are
+              merged into a single report.
+            </p>
+            <ul class="step-list">
+              <li>
+                Input normalization: validate file type, size, and metadata.
+              </li>
+              <li>
+                Technique execution: run image, PDF, or code detectors in
+                parallel.
+              </li>
+              <li>
+                Finding aggregation: collect anomalies, severity, and evidence.
+              </li>
+              <li>
+                Confidence calculation: weight signals by severity and density.
+              </li>
+              <li>
+                Report generation: output JSON + optional PDF with findings.
+              </li>
+            </ul>
+          </section>
+
           <section class="doc-card" id="image">
             <h2>Image Forensics</h2>
             <p>
               Image analysis combines pixel-level and metadata-level checks to
               detect editing, splicing, or synthetic generation.
             </p>
+            <ul class="step-list">
+              <li>ELA compares original vs. recompressed image artifacts.</li>
+              <li>Noise analysis checks sensor consistency across regions.</li>
+              <li>Copy-move detection locates duplicated blocks.</li>
+              <li>Frequency analysis flags unnatural spectral spikes.</li>
+              <li>Metadata checks reveal editing software or anomalies.</li>
+            </ul>
             <div class="grid-2">
-              <div class="mini-card">
+              <div class="mini-card" data-tech="ela">
                 <h4>Error Level Analysis (ELA)</h4>
                 <p>
                   Resaves the image and compares compression artifacts to expose
                   inconsistent regions.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="image_metadata">
                 <h4>Metadata Analysis</h4>
                 <p>
                   Flags missing EXIF tags, edit software signatures, and date
                   mismatches.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="copy_move">
                 <h4>Copy-Move Detection</h4>
                 <p>
                   Finds duplicated blocks that indicate cloned regions inside a
                   single image.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="noise_inconsistency">
                 <h4>Noise Inconsistency</h4>
                 <p>
                   Detects abrupt changes in sensor noise that often appear in
                   spliced areas.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="double_jpeg">
                 <h4>Double JPEG Analysis</h4>
                 <p>
                   Looks for multiple compression cycles that suggest editing
                   workflows.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="splicing">
                 <h4>Splicing Detection</h4>
                 <p>
                   Compares edge coherence and texture seams to surface inserted
                   objects.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="ai_generated_image">
                 <h4>AI-Generated Detection</h4>
                 <p>
                   Evaluates synthetic artifacts and generation fingerprints in
                   the pixel distribution.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="frequency_domain">
                 <h4>Frequency Domain Analysis</h4>
                 <p>
                   Checks for unusual frequency spikes that indicate tampering or
@@ -401,63 +547,66 @@
               PDF analysis focuses on metadata anomalies, structure changes, and
               hidden or inconsistent content.
             </p>
+            <ul class="step-list">
+              <li>
+                Metadata extraction checks Creator/Producer, dates, and gaps.
+              </li>
+              <li>Incremental update scans detect repeated edit cycles.</li>
+              <li>
+                Text and font consistency analysis finds layout tampering.
+              </li>
+              <li>Embedded object scanning flags scripts or hidden content.</li>
+              <li>Timestamp and signature checks validate integrity.</li>
+            </ul>
             <div class="grid-2">
-              <div class="mini-card">
+              <div class="mini-card" data-tech="pdf_metadata">
                 <h4>Metadata Extraction</h4>
                 <p>
                   Checks for missing Creator/Producer fields and suspicious
                   metadata gaps.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="incremental_updates">
                 <h4>Incremental Update Detection</h4>
                 <p>
                   Counts multiple EOF markers to detect repeated modifications.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="text_consistency">
                 <h4>Text Consistency Analysis</h4>
                 <p>
                   Measures font variety and sizing irregularities across pages.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="suspicious_objects">
                 <h4>Suspicious Object Detection</h4>
-                <p>
-                  Flags embedded scripts or unusual object streams.
-                </p>
+                <p>Flags embedded scripts or unusual object streams.</p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="font_analysis">
                 <h4>Font Analysis</h4>
-                <p>
-                  Finds inconsistent font usage that suggests post-editing.
-                </p>
+                <p>Finds inconsistent font usage that suggests post-editing.</p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="digital_signatures">
                 <h4>Digital Signature Verification</h4>
-                <p>
-                  Reports missing or invalid signatures that reduce trust.
-                </p>
+                <p>Reports missing or invalid signatures that reduce trust.</p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="hidden_content">
                 <h4>Hidden Content Detection</h4>
                 <p>
                   Looks for invisible text layers, white-on-white content, or
                   clipped objects.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="embedded_image_analysis">
                 <h4>Embedded Image Analysis</h4>
                 <p>
                   Reviews image objects inside the PDF for anomalies and
                   mismatched encoding.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="timestamp_analysis">
                 <h4>Timestamp Analysis</h4>
-                <p>
-                  Flags irregular creation/modification date patterns.
-                </p>
+                <p>Flags irregular creation/modification date patterns.</p>
               </div>
             </div>
           </section>
@@ -468,42 +617,53 @@
               Code analysis blends heuristic checks and ML inference to detect
               AI-generated structure, patterns, and formatting.
             </p>
+            <ul class="step-list">
+              <li>
+                Extract code metrics: lines, tokens, and indentation levels.
+              </li>
+              <li>
+                Detect comment style: docstring saturation and inline notes.
+              </li>
+              <li>Measure structure: function lengths and nesting depth.</li>
+              <li>Run ML inference: feature vector + TF-IDF text signals.</li>
+              <li>Combine ML + heuristics for explainable findings.</li>
+            </ul>
             <div class="grid-2">
-              <div class="mini-card">
+              <div class="mini-card" data-tech="comment_patterns">
                 <h4>Comment Pattern Analysis</h4>
                 <p>
                   Looks for overly structured docstrings and explanatory
                   comments (high AI signal).
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="code_structure">
                 <h4>Code Structure Analysis</h4>
                 <p>
                   Measures nesting depth, average function size, and uniformity.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="naming_conventions">
                 <h4>Naming Convention Analysis</h4>
                 <p>
                   Checks for overly consistent naming and uniform identifier
                   length.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="ai_phrase_detection">
                 <h4>AI-Specific Pattern Detection</h4>
                 <p>
                   Flags phrases like <code>Example:</code>, <code>Note:</code>,
                   and helper-style descriptions.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="complexity_analysis">
                 <h4>Complexity Analysis</h4>
                 <p>
                   Evaluates branching density, error handling, and structural
                   balance.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="consistency_analysis">
                 <h4>Consistency Analysis</h4>
                 <p>
                   Detects uniform indentation and spacing typical of AI output.
@@ -518,30 +678,34 @@
               The ML model uses a mix of structured features and text-based
               signals to estimate AI-generation probability.
             </p>
+            <ul class="step-list">
+              <li>
+                Feature extraction builds a numeric vector per code sample.
+              </li>
+              <li>TF-IDF captures n-gram patterns across the dataset.</li>
+              <li>
+                Vectors are scaled and fed into a gradient boosting model.
+              </li>
+              <li>Probabilities are combined with heuristic flags.</li>
+            </ul>
             <div class="grid-2">
-              <div class="mini-card">
+              <div class="mini-card" data-tech="tfidf_features">
                 <h4>TF-IDF Text Features</h4>
                 <p>
                   N-gram analysis captures repeated AI phrasing and structure.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="structural_metrics">
                 <h4>Structural Metrics</h4>
-                <p>
-                  Function density, nesting depth, and blank-line ratios.
-                </p>
+                <p>Function density, nesting depth, and blank-line ratios.</p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="comment_ratios">
                 <h4>Comment Ratios</h4>
-                <p>
-                  Comment-to-code balance and docstring saturation.
-                </p>
+                <p>Comment-to-code balance and docstring saturation.</p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="indentation_consistency">
                 <h4>Indentation Consistency</h4>
-                <p>
-                  Highly uniform indentation is a strong AI signal.
-                </p>
+                <p>Highly uniform indentation is a strong AI signal.</p>
               </div>
             </div>
             <div class="callout">
@@ -557,6 +721,15 @@
               anomalies. The report includes technique names, findings, and
               metadata issues, plus optional PDF exports.
             </p>
+            <ul class="step-list">
+              <li>Findings are weighted by severity and signal confidence.</li>
+              <li>
+                Multiple weak signals can combine into a medium risk score.
+              </li>
+              <li>
+                High confidence is only reached with repeated strong signals.
+              </li>
+            </ul>
             <div class="pill-row">
               <span class="pill">Confidence Score</span>
               <span class="pill">Risk Level</span>
@@ -572,29 +745,23 @@
               They are not single-failure checks but high-confidence markers.
             </p>
             <div class="grid-2">
-              <div class="mini-card">
+              <div class="mini-card" data-tech="perfect_docstrings">
                 <h4>Perfect Docstrings</h4>
                 <p>
                   Every function has full docstrings with structured sections.
                 </p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="inline_comments">
                 <h4>Inline Explanatory Comments</h4>
-                <p>
-                  Step-by-step comments explaining each operation.
-                </p>
+                <p>Step-by-step comments explaining each operation.</p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="repeated_updates">
                 <h4>Repeated Incremental PDF Updates</h4>
-                <p>
-                  Multiple EOF markers indicating heavy editing.
-                </p>
+                <p>Multiple EOF markers indicating heavy editing.</p>
               </div>
-              <div class="mini-card">
+              <div class="mini-card" data-tech="compression_clusters">
                 <h4>Compression Inconsistency Clusters</h4>
-                <p>
-                  Tight ELA clusters showing localized recompression.
-                </p>
+                <p>Tight ELA clusters showing localized recompression.</p>
               </div>
             </div>
           </section>
@@ -603,6 +770,7 @@
         <aside class="toc">
           <h3>On this page</h3>
           <a href="#overview">Overview</a>
+          <a href="#algorithm">Algorithm Flow</a>
           <a href="#image">Image Forensics</a>
           <a href="#pdf">PDF Forensics</a>
           <a href="#code">Code Detection</a>
@@ -612,5 +780,348 @@
         </aside>
       </div>
     </div>
+
+    <div class="tech-modal-backdrop" id="techModalBackdrop"></div>
+    <div class="tech-modal" id="techModal" aria-hidden="true">
+      <div class="tech-modal-card" role="dialog" aria-modal="true">
+        <div class="tech-modal-header">
+          <div class="tech-modal-title" id="techModalTitle">Technique</div>
+          <button class="tech-modal-close" type="button" id="techModalClose">
+            Close
+          </button>
+        </div>
+        <div class="tech-modal-body" id="techModalBody"></div>
+      </div>
+    </div>
+
+    <script>
+      const techDetails = {
+        ela: {
+          title: "Error Level Analysis (ELA)",
+          body: "ELA resaves an image at a known quality and computes the pixel-by-pixel difference. Regions that were edited or pasted often compress differently and appear as bright hotspots in the error map.",
+          steps: [
+            "Resave image at fixed JPEG quality.",
+            "Compute absolute difference between original and resaved image.",
+            "Enhance the error map and locate high-variance regions.",
+          ],
+        },
+        image_metadata: {
+          title: "Image Metadata Analysis",
+          body: "Checks EXIF metadata for missing tags, inconsistent timestamps, and editing software signatures that often appear after manipulation.",
+          steps: [
+            "Extract EXIF tags like Make, Model, DateTime.",
+            "Flag missing or inconsistent fields.",
+            "Look for common editing software markers.",
+          ],
+        },
+        copy_move: {
+          title: "Copy-Move Detection",
+          body: "Detects duplicated regions within the same image, a common technique for hiding or cloning objects.",
+          steps: [
+            "Create block or keypoint descriptors.",
+            "Cluster similar patches across the image.",
+            "Highlight duplicated areas that exceed similarity thresholds.",
+          ],
+        },
+        noise_inconsistency: {
+          title: "Noise Inconsistency",
+          body: "Analyzes sensor noise patterns. Spliced regions often carry different noise fingerprints, revealing edits.",
+          steps: [
+            "Estimate local noise residuals.",
+            "Compare noise statistics between regions.",
+            "Flag abrupt transitions or mismatches.",
+          ],
+        },
+        double_jpeg: {
+          title: "Double JPEG Analysis",
+          body: "Detects multiple JPEG compression cycles that can indicate post-processing.",
+          steps: [
+            "Analyze JPEG quantization artifacts.",
+            "Search for periodic peaks in DCT histograms.",
+            "Flag multi-compression signatures.",
+          ],
+        },
+        splicing: {
+          title: "Splicing Detection",
+          body: "Looks for edge and texture discontinuities where content may have been inserted.",
+          steps: [
+            "Measure edge coherence across boundaries.",
+            "Compare texture statistics between regions.",
+            "Highlight seams with abnormal transitions.",
+          ],
+        },
+        ai_generated_image: {
+          title: "AI-Generated Image Detection",
+          body: "Checks for synthetic artifacts and distribution patterns commonly produced by generative models.",
+          steps: [
+            "Analyze texture uniformity and micro-patterns.",
+            "Inspect frequency distribution for GAN artifacts.",
+            "Combine with other signals for confidence.",
+          ],
+        },
+        frequency_domain: {
+          title: "Frequency Domain Analysis",
+          body: "Examines spectral patterns for abnormal spikes and repetitive signals that appear after manipulation.",
+          steps: [
+            "Transform image to frequency domain.",
+            "Detect unusual peaks or symmetry.",
+            "Flag spectra inconsistent with natural images.",
+          ],
+        },
+        pdf_metadata: {
+          title: "PDF Metadata Extraction",
+          body: "Extracts Creator, Producer, and timestamps to detect missing or suspicious metadata.",
+          steps: [
+            "Read metadata fields from the PDF header.",
+            "Check for missing or blank values.",
+            "Identify known editing tool signatures.",
+          ],
+        },
+        incremental_updates: {
+          title: "Incremental Update Detection",
+          body: "Counts incremental updates by checking multiple EOF markers, which indicate repeated edits.",
+          steps: [
+            "Scan for EOF markers in the file.",
+            "Estimate number of incremental updates.",
+            "Flag excessive update chains.",
+          ],
+        },
+        text_consistency: {
+          title: "Text Consistency Analysis",
+          body: "Measures font usage and sizing for irregularities that indicate edits.",
+          steps: [
+            "Extract font names and sizes per page.",
+            "Compute variance and outlier usage.",
+            "Flag unusual font combinations.",
+          ],
+        },
+        suspicious_objects: {
+          title: "Suspicious Object Detection",
+          body: "Inspects embedded scripts, forms, or object streams that may hide or alter content.",
+          steps: [
+            "Enumerate embedded objects.",
+            "Flag scripts, actions, or unusual streams.",
+            "Summarize suspicious elements.",
+          ],
+        },
+        font_analysis: {
+          title: "Font Analysis",
+          body: "Detects inconsistent font usage that may indicate post-editing.",
+          steps: [
+            "Collect font usage per page.",
+            "Identify anomalies or rare fonts.",
+            "Highlight layout inconsistencies.",
+          ],
+        },
+        digital_signatures: {
+          title: "Digital Signature Verification",
+          body: "Checks signature presence and validity to ensure integrity.",
+          steps: [
+            "Inspect signature fields.",
+            "Validate signature structure.",
+            "Report missing or invalid signatures.",
+          ],
+        },
+        hidden_content: {
+          title: "Hidden Content Detection",
+          body: "Finds invisible layers and hidden text that can obscure document meaning.",
+          steps: [
+            "Search for white-on-white text and hidden layers.",
+            "Inspect clipping and opacity settings.",
+            "Flag objects outside visible bounds.",
+          ],
+        },
+        embedded_image_analysis: {
+          title: "Embedded Image Analysis",
+          body: "Inspects images inside PDFs for format mismatches or anomalies.",
+          steps: [
+            "Extract embedded images.",
+            "Check encoding and dimensions.",
+            "Flag inconsistencies between metadata and content.",
+          ],
+        },
+        timestamp_analysis: {
+          title: "Timestamp Analysis",
+          body: "Evaluates creation and modification timestamps for anomalies.",
+          steps: [
+            "Compare creation and modification times.",
+            "Detect out-of-order or missing timestamps.",
+            "Flag suspicious time gaps.",
+          ],
+        },
+        comment_patterns: {
+          title: "Comment Pattern Analysis",
+          body: "AI-generated code often includes overly structured docstrings and explanatory comments.",
+          steps: [
+            "Count docstrings and comment density.",
+            "Detect AI-style phrases like 'Example:' or 'Note:'.",
+            "Flag unusually uniform commentary.",
+          ],
+        },
+        code_structure: {
+          title: "Code Structure Analysis",
+          body: "Measures function length, nesting depth, and structural uniformity.",
+          steps: [
+            "Parse code into functions and blocks.",
+            "Compute average function length and nesting depth.",
+            "Flag overly uniform structure.",
+          ],
+        },
+        naming_conventions: {
+          title: "Naming Convention Analysis",
+          body: "Checks for highly uniform naming styles and overly descriptive identifiers.",
+          steps: [
+            "Extract identifiers from code.",
+            "Analyze camelCase and snake_case ratios.",
+            "Flag unusual consistency or length.",
+          ],
+        },
+        ai_phrase_detection: {
+          title: "AI-Specific Pattern Detection",
+          body: "Detects phrases and docstring patterns common in AI-generated code.",
+          steps: [
+            "Scan for known AI phrases.",
+            "Check docstring structure and consistency.",
+            "Combine with other heuristics.",
+          ],
+        },
+        complexity_analysis: {
+          title: "Complexity Analysis",
+          body: "Reviews branching density, try/catch usage, and structural balance.",
+          steps: [
+            "Measure branching keywords per line.",
+            "Count error-handling constructs.",
+            "Flag unusual balance or density.",
+          ],
+        },
+        consistency_analysis: {
+          title: "Consistency Analysis",
+          body: "AI-generated code is often perfectly consistent in indentation and spacing.",
+          steps: [
+            "Measure indentation uniformity.",
+            "Analyze whitespace around operators.",
+            "Flag near-perfect consistency.",
+          ],
+        },
+        tfidf_features: {
+          title: "TF-IDF Text Features",
+          body: "Captures n-gram patterns in text to detect AI phrasing and structure.",
+          steps: [
+            "Tokenize code into n-grams.",
+            "Compute TF-IDF weights across the dataset.",
+            "Use vectors in ML classification.",
+          ],
+        },
+        structural_metrics: {
+          title: "Structural Metrics",
+          body: "Quantifies metrics like function density and nesting depth.",
+          steps: [
+            "Compute line and function statistics.",
+            "Measure nesting depth and blank-line ratios.",
+            "Feed metrics into the classifier.",
+          ],
+        },
+        comment_ratios: {
+          title: "Comment Ratios",
+          body: "Compares comment volume to code volume to find AI-like verbosity.",
+          steps: [
+            "Count comments and docstrings.",
+            "Compute comment-to-code ratio.",
+            "Flag high ratios with uniform style.",
+          ],
+        },
+        indentation_consistency: {
+          title: "Indentation Consistency",
+          body: "Uniform indentation is a strong AI signal in generated code.",
+          steps: [
+            "Measure indentation levels.",
+            "Detect multiple-of-4 or multiple-of-2 patterns.",
+            "Score consistency strength.",
+          ],
+        },
+        perfect_docstrings: {
+          title: "Perfect Docstrings",
+          body: "Consistent docstrings on every function are uncommon in human code at scale.",
+          steps: [
+            "Count functions vs. docstrings.",
+            "Flag near-perfect coverage.",
+            "Combine with comment density metrics.",
+          ],
+        },
+        inline_comments: {
+          title: "Inline Explanatory Comments",
+          body: "Step-by-step comments explaining each line are frequent in AI outputs.",
+          steps: [
+            "Detect inline comment patterns.",
+            "Measure frequency and placement.",
+            "Flag high-density explanatory comments.",
+          ],
+        },
+        repeated_updates: {
+          title: "Repeated Incremental PDF Updates",
+          body: "Multiple incremental updates indicate heavy editing or revisions.",
+          steps: [
+            "Count EOF markers.",
+            "Estimate update count.",
+            "Flag excessive updates.",
+          ],
+        },
+        compression_clusters: {
+          title: "Compression Inconsistency Clusters",
+          body: "ELA clusters reveal localized re-compression after edits.",
+          steps: [
+            "Locate ELA hotspots.",
+            "Cluster adjacent anomalies.",
+            "Flag dense clusters as suspicious.",
+          ],
+        },
+      };
+
+      const techModal = document.getElementById("techModal");
+      const techModalBackdrop = document.getElementById("techModalBackdrop");
+      const techModalTitle = document.getElementById("techModalTitle");
+      const techModalBody = document.getElementById("techModalBody");
+      const techModalClose = document.getElementById("techModalClose");
+
+      function openTechModal(key) {
+        const details = techDetails[key];
+        if (!details) return;
+
+        techModalTitle.textContent = details.title;
+        techModalBody.innerHTML = `<p>${details.body}</p>`;
+
+        if (details.steps && details.steps.length) {
+          const steps = details.steps
+            .map((step) => `<li>${step}</li>`)
+            .join("");
+          techModalBody.innerHTML += `<ul>${steps}</ul>`;
+        }
+
+        techModal.classList.add("show");
+        techModalBackdrop.classList.add("show");
+        techModal.setAttribute("aria-hidden", "false");
+      }
+
+      function closeTechModal() {
+        techModal.classList.remove("show");
+        techModalBackdrop.classList.remove("show");
+        techModal.setAttribute("aria-hidden", "true");
+      }
+
+      document.querySelectorAll(".mini-card").forEach((card) => {
+        card.addEventListener("click", () => {
+          const key = card.getAttribute("data-tech");
+          openTechModal(key);
+        });
+      });
+
+      techModalClose.addEventListener("click", closeTechModal);
+      techModalBackdrop.addEventListener("click", closeTechModal);
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeTechModal();
+        }
+      });
+    </script>
   </body>
 </html>

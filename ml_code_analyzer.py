@@ -29,7 +29,9 @@ class MLCodeAnalyzer:
         
         # Try to load pre-trained model
         if os.path.exists(model_path):
-            self.load_model()
+            if not self.load_model():
+                print("[!] Failed to load model. Re-initializing a fresh model.")
+                self.initialize_model()
         else:
             print("[!] No pre-trained model found. Use train() method to train a new model.")
             self.initialize_model()
@@ -499,4 +501,8 @@ class MLCodeAnalyzer:
             return True
         except Exception as e:
             print(f"[!] Error loading model: {e}")
+            self.model = None
+            self.vectorizer = None
+            self.scaler = None
+            self.feature_names = []
             return False

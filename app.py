@@ -2,8 +2,29 @@
 AI Fraud Detection Agent - Main Application
 Web interface for uploading and analyzing documents for fraud detection
 """
-from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
 import os
+import sys
+
+
+def _maybe_reexec_with_venv():
+    """Ensure app.py runs in the local venv when available."""
+    venv_python = os.path.join(
+        os.path.dirname(__file__), ".venv312", "Scripts", "python.exe"
+    )
+    if not os.path.exists(venv_python):
+        return
+
+    already = os.environ.get("KAYA_VENV_REEXEC") == "1"
+    current = os.path.abspath(sys.executable).lower()
+    target = os.path.abspath(venv_python).lower()
+    if not already and current != target:
+        os.environ["KAYA_VENV_REEXEC"] = "1"
+        os.execv(venv_python, [venv_python] + sys.argv)
+
+
+_maybe_reexec_with_venv()
+
+from flask import Flask, render_template, request, jsonify, send_file, redirect, url_for
 from werkzeug.utils import secure_filename
 import config
 from image_tampering_detector import ImageTamperingDetector
@@ -16,7 +37,7 @@ from datetime import datetime
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config.SECRET_KEY
 app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = config.MAX_FILE_SIZE
+
 
 # Global storage for analysis results
 analysis_cache = {}

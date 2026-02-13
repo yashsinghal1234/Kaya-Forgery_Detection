@@ -5,6 +5,7 @@ Train the model to detect AI-generated code
 from ml_code_analyzer import MLCodeAnalyzer
 import os
 import sys
+import json
 
 try:
     from datasets import load_dataset
@@ -234,14 +235,14 @@ def load_hf_dataset_python(max_samples_per_class=2000):
             continue
 
         if label_value:
-            if ai_count >= max_samples_per_class:
+            if max_samples_per_class and ai_count >= max_samples_per_class:
                 continue
             ai_count += 1
             target_dir = ai_dir
             file_index = ai_count
             prefix = "ai"
         else:
-            if human_count >= max_samples_per_class:
+            if max_samples_per_class and human_count >= max_samples_per_class:
                 continue
             human_count += 1
             target_dir = human_dir
@@ -252,10 +253,59 @@ def load_hf_dataset_python(max_samples_per_class=2000):
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(code_text)
 
-        if human_count >= max_samples_per_class and ai_count >= max_samples_per_class:
+        if max_samples_per_class and human_count >= max_samples_per_class and ai_count >= max_samples_per_class:
             break
 
     print(f"[+] Saved python samples: {human_count} human, {ai_count} AI")
+    return human_count > 0 and ai_count > 0
+
+
+def load_back3474_dataset(file_path, max_samples_per_class=None):
+    """Load Back3474 AI/Human dataset JSON and save python samples."""
+    if not os.path.exists(file_path):
+        print(f"[X] Dataset file not found: {file_path}")
+        return False
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as exc:
+        print(f"[X] Failed to read dataset: {exc}")
+        return False
+
+    human_dir = os.path.join("datasets", "training", "human_written", "python")
+    ai_dir = os.path.join("datasets", "training", "ai_generated", "python")
+    os.makedirs(human_dir, exist_ok=True)
+    os.makedirs(ai_dir, exist_ok=True)
+
+    human_count = 0
+    ai_count = 0
+
+    for row in data:
+        language = str(row.get("language", "")).lower()
+        if "python" not in language:
+            continue
+
+        human_code = row.get("human_generated_code")
+        if isinstance(human_code, str) and human_code.strip():
+            if not max_samples_per_class or human_count < max_samples_per_class:
+                human_count += 1
+                file_path_out = os.path.join(human_dir, f"human_back_{human_count:05d}.py")
+                with open(file_path_out, "w", encoding="utf-8") as f:
+                    f.write(human_code)
+
+        ai_code = row.get("ai_generated_code")
+        if isinstance(ai_code, str) and ai_code.strip():
+            if not max_samples_per_class or ai_count < max_samples_per_class:
+                ai_count += 1
+                file_path_out = os.path.join(ai_dir, f"ai_back_{ai_count:05d}.py")
+                with open(file_path_out, "w", encoding="utf-8") as f:
+                    f.write(ai_code)
+
+        if max_samples_per_class and human_count >= max_samples_per_class and ai_count >= max_samples_per_class:
+            break
+
+    print(f"[+] Saved python samples from Back3474: {human_count} human, {ai_count} AI")
     return human_count > 0 and ai_count > 0
 
 
@@ -271,11 +321,44 @@ def main():
         print("[?] Load Hugging Face dataset for Python training?")
         response = input("Load basakdemirok/AIGCodeSet? (y/n): ").strip().lower()
         if response == "y":
-            loaded = load_hf_dataset_python()
+            limit_raw = input("Max samples per class (enter number or 'all'): ").strip().lower()
+            if limit_raw in ("", "default"):
+                max_samples = 2000
+            elif limit_raw == "all":
+                max_samples = None
+            else:
+                try:
+                    max_samples = int(limit_raw)
+                except ValueError:
+                    print("[!] Invalid number. Using default of 2000.")
+                    max_samples = 2000
+
+            loaded = load_hf_dataset_python(max_samples_per_class=max_samples)
             if not loaded:
                 print("[!] Hugging Face dataset load failed. Falling back to local dataset.")
     else:
         print("[!] datasets library not installed. Skipping Hugging Face dataset load.")
+
+    # Optionally load Back3474 dataset
+    back_path = os.path.join("datasets", "external", "ai_human_code.jsonl")
+    if os.path.exists(back_path):
+        print("[?] Load Back3474 AI/Human dataset for Python training?")
+        response = input("Load Back3474 dataset? (y/n): ").strip().lower()
+        if response == "y":
+            limit_raw = input("Max samples per class (enter number or 'all'): ").strip().lower()
+            if limit_raw in ("", "default"):
+                max_samples = None
+            elif limit_raw == "all":
+                max_samples = None
+            else:
+                try:
+                    max_samples = int(limit_raw)
+                except ValueError:
+                    print("[!] Invalid number. Using all samples.")
+                    max_samples = None
+            loaded = load_back3474_dataset(back_path, max_samples_per_class=max_samples)
+            if not loaded:
+                print("[!] Back3474 dataset load failed. Continuing with existing data.")
 
     # Check dataset
     if not check_dataset():

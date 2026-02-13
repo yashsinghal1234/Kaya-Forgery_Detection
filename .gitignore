@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+
+.venv312/
+
+datasets/training/
+datasets/external/
+
+temp/
+uploads/
+reports/
+
+models/*.pkl
+models/*.joblib
+
+.DS_Store
+Thumbs.db
